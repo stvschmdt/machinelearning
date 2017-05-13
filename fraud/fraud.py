@@ -8,6 +8,9 @@ from sklearn.cross_validation import KFold, cross_val_score
 from sklearn.metrics import confusion_matrix,precision_recall_curve,auc,roc_auc_score,roc_curve,recall_score,classification_report
 
 
+def logger(msg):
+    print msg
+
 def load_data(filename):
 	df = pd.read_csv(filename)
 	return df
@@ -57,9 +60,9 @@ def under_sample(df, y_col):
 
 def cross_validation_sets(xvars, yvars, test_split, rand_state):
 	X_train, X_test, y_train, y_test = train_test_split(xvars, yvars, test_size=test_split, random_state=rand_state) 
-	print("Number transactions train dataset: ", len(X_train))
-	print("Number transactions test dataset: ", len(X_test))
-	print("Total number of transactions: ", len(X_train)+len(X_test))
+	print "Number transactions train dataset: ", len(X_train)
+	print "Number transactions test dataset: ", len(X_test)
+	print "Total number of transactions: ", len(X_train)+len(X_test)
 	return X_train, X_test, y_train, y_test
 
 def printing_Kfold_scores(x_train_data,y_train_data):
@@ -74,10 +77,10 @@ def printing_Kfold_scores(x_train_data,y_train_data):
     # the k-fold will give 2 lists: train_indices = indices[0], test_indices = indices[1]
     j = 0
     for c_param in c_param_range:
-        print('-------------------------------------------')
-        print('C parameter: ', c_param)
-        print('-------------------------------------------')
-        print('')
+        print'-------------------------------------------'
+        print 'C parameter: ', c_param
+        print '-------------------------------------------'
+        print ''
 
         recall_accs = []
         for iteration, indices in enumerate(fold,start=1):
@@ -95,21 +98,21 @@ def printing_Kfold_scores(x_train_data,y_train_data):
             # Calculate the recall score and append it to a list for recall scores representing the current c_parameter
             recall_acc = recall_score(y_train_data.iloc[indices[1],:].values,y_pred_undersample)
             recall_accs.append(recall_acc)
-            print('Iteration ', iteration,': recall score = ', recall_acc)
+            print 'Iteration ', iteration,': recall score = ', recall_acc
 
         # The mean value of those recall scores is the metric we want to save and get hold of.
         results_table.ix[j,'Mean recall score'] = np.mean(recall_accs)
         j += 1
-        print('')
-        print('Mean recall score ', np.mean(recall_accs))
-        print('')
+        print ''
+        print 'Mean recall score ', np.mean(recall_accs)
+        print ''
 
     best_c = results_table.loc[results_table['Mean recall score'].idxmax()]['C_parameter']
     
     # Finally, we can check which C parameter is the best amongst the chosen.
-    print('*********************************************************************************')
-    print('Best model to choose from cross validation is with C parameter = ', best_c)
-    print('*********************************************************************************')
+    print '*********************************************************************************'
+    print 'Best model to choose from cross validation is with C parameter = ', best_c
+    print '*********************************************************************************'
     
     return best_c
 
