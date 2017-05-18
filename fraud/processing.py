@@ -17,10 +17,16 @@ class Processor(object):
         self.commands = cmds
         self.logger = Logging()
 
-    def load_data(self, filename):
+    def load_csv(self, filename):
         '''return a pandas dataframe of csv contents
         '''
         df = pd.read_csv(filename)
+        return df
+
+    def load_pickle(self, filename):
+        '''return a pandas dataframe of pickled  contents
+        '''
+        df = pd.read_pickle(filename)
         return df
 
     def normalize_col(self, df, col_name):
