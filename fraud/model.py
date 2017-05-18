@@ -1,18 +1,20 @@
 import numpy as np
 import pandas as pd
 from logger import Logging
+from processing import Processor
 
 class Model(object):
 
     def __init__(self, params={}, debug=0):
-        self.paramaters=params
+        self.parameters=params
         self.debug=0
         self.num_params=len(params)
-        self.logger = Logging()
         self.info = {}
         self.results = {}
+        self.logger = Logging()
+        self.processor = Processor()
 
-    def get_paramaters(self):
+    def get_parameters(self):
         return self.parameters
 
     def set_parameters(self, p, val):

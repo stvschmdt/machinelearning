@@ -142,7 +142,7 @@ def get_roc_curve(xtrain, xtest, ytrain, ytest, c, penalty='l1'):
 
 
 #temp driver
-CSV_FILE = 'creditcard.csv'
+CSV_FILE = '~/store/fraud_data/creditcard.csv'
 YCOL = 'Class'
 
 data = load_data(CSV_FILE)
