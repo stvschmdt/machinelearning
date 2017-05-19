@@ -96,15 +96,15 @@ class Processor(object):
 
         # Showing ratio
         # TODO use logger in debug mode or verbose mode for this
-        self.logger.info("Percentage of normal transactions: %f"%(len(under_sample_df[under_sample_df[y_col] == 0])/len(under_sample_df)))
-        self.logger.info("Percentage of fraud transactions: %f"%(len(under_sample_df[under_sample_df[y_col] == 1])/len(under_sample_df)))
-        self.logger.info("Total number of transactions in resampled df: %f"%len(under_sample_df))
+        self.logger.info("[proc] normal transactions: %s"%(len(under_sample_df[under_sample_df[y_col] == 0])/len(under_sample_df)))
+        self.logger.info("[proc] fraud transactions: %s"%(len(under_sample_df[under_sample_df[y_col] == 1])/len(under_sample_df)))
+        self.logger.info("[proc] number of transactions in resample: %s"%len(under_sample_df))
         return X_undersample, y_undersample
 
     #TODO move this to model
     def cross_validation_sets(self, xvars, yvars, test_split, rand_state):
         X_train, X_test, y_train, y_test = train_test_split(xvars, yvars, test_size=test_split, random_state=rand_state) 
-        self.logger.info("Number transactions train dataset: %f"%len(X_train))
-        self.logger.info("Number transactions test dataset: %f"%len(X_test))
-        self.logger.info("Total number of transactions: %f"%(len(X_train)+len(X_test)))
+        self.logger.info("[proc] transactions train dataset: %s"%len(X_train))
+        self.logger.info("[proc] transactions test dataset: %s"%len(X_test))
+        self.logger.info("[proc] total transactions: %s"%(len(X_train)+len(X_test)))
         return X_train, X_test, y_train, y_test

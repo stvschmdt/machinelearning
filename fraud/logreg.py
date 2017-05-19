@@ -15,7 +15,7 @@ class LogReg(Model):
 
     def __init__(self, params={}, debug=0, name='logistic_regrssion'):
         Model.__init__(self, params, debug)
-        #self.name = name
+        self.name = name
 
     #TODO move this to model
     def printing_Kfold_scores(self, x_train_data,y_train_data):
@@ -30,7 +30,7 @@ class LogReg(Model):
         # the k-fold will give 2 lists: train_indices = indices[0], test_indices = indices[1]
         j = 0
         for c_param in c_param_range:
-            logger.results('C parameter: %f'% c_param)
+            self.logger.results('C parameter: %f'% c_param)
 
             recall_accs = []
             for iteration, indices in enumerate(fold,start=1):
@@ -48,17 +48,17 @@ class LogReg(Model):
                 # Calculate the recall score and append it to a list for recall scores representing the current c_parameter
                 recall_acc = recall_score(y_train_data.iloc[indices[1],:].values,y_pred_undersample)
                 recall_accs.append(recall_acc)
-                logger.info('Iteration: %f Recall: %f'%(iteration,recall_acc))
+                #self.logger.info('Iteration: %f Recall: %f'%(iteration,recall_acc))
 
             # The mean value of those recall scores is the metric we want to save and get hold of.
             results_table.ix[j,'Mean recall score'] = np.mean(recall_accs)
             j += 1
-            logger.results('Mean recall score %f'%np.mean(recall_accs))
+            self.logger.results('Mean recall score %f'%np.mean(recall_accs))
 
         best_c = results_table.loc[results_table['Mean recall score'].idxmax()]['C_parameter']
         
         # Finally, we can check which C parameter is the best amongst the chosen.
-        logger.info('Best model to choose from cross validation is with C parameter = %f'%best_c)
+        self.logger.info('Best model to choose from cross validation is with C parameter = %f'%best_c)
         
         return best_c
 
@@ -72,7 +72,7 @@ class LogReg(Model):
         cnfmatrix = confusion_matrix(ytest,ypredict)
         np.set_printoptions(precision=2)
 
-        logger.results("Recall metric in the testing dataset: %f"%(cnfmatrix[1,1]/(cnfmatrix[1,0]+cnfmatrix[1,1])))
+        self.logger.results("Recall metric for test set: %f"%(cnfmatrix[1,1]/(cnfmatrix[1,0]+cnfmatrix[1,1])))
         return ypredict
 
     #TODO move this to model class
@@ -84,7 +84,7 @@ class LogReg(Model):
         roc_auc = auc(fpr,tpr)
         #for v in zip(fpr,tpr):
             #print v
-        logger.results('AUC: %f'%roc_auc)
+        self.logger.results('AUC: %f'%roc_auc)
         return roc_auc
 
 
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
 
 #TODO make this test suite
-    data = proc.load_data(CSV_FILE)
+    data = proc.load_csv(CSV_FILE)
     data = proc.normalize_col(data, 'Amount')
     data = data.drop(['Time'],axis=1)
     X = proc.get_xvals(data, YCOL)
