@@ -1,4 +1,5 @@
 from sklearn import svm
+from sklearn.grid_search import GridSearchCV
 
 from model import Model
 from processing import Processor
@@ -21,6 +22,22 @@ class SVM(Model):
         self.svm_fit()
         self.svm_predict()
         self.svm_accuracy()
+
+    def grid_c_vals(self, l_c):
+        self.c_vals = l_c
+    
+    def grid_gamma_vals(self, l_gamma):
+        self.gamma_vals = l_gamma
+
+    def poly_degrees(self, l_degrees):
+        self.poly_degrees = l_degrees
+
+    def grid_search(self, tuned_parameters):
+        self.grid_svm = GridSearchCV(self.clf, tuned_parameters,cv=10,scoring='accuracy')
+        self.logger.results(self.grid_svm.best_params_)
+
+    def svm_reinit_params(clf):
+        self.clf = clf
 
     def svm_fit(self):
         self.clf.fit(self.xtrain, self.ytrain.values.ravel())
