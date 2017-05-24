@@ -1,5 +1,7 @@
 from sklearn import svm
 from sklearn.grid_search import GridSearchCV
+from sklearn.metrics import confusion_matrix, f1_score, recall_score, precision_score
+
 
 from model import Model
 from processing import Processor
@@ -22,6 +24,10 @@ class SVM(Model):
         self.svm_fit()
         self.svm_predict()
         self.svm_accuracy()
+        self.svm_confusion_matrix()
+        self.svm_precision_score()
+        self.svm_recall_score()
+        self.svm_f1_score()
 
     def grid_c_vals(self, l_c):
         self.c_vals = l_c
@@ -49,7 +55,18 @@ class SVM(Model):
         self.num_correct = sum(int(a == y) for a, y in zip(self.predictions, self.ytest.values.ravel()))
         self.logger.info("[svm] %s of %s = %s" % (self.num_correct, len(self.ytest), self.num_correct/float(len(self.ytest))))
 
-    
+    def svm_confusion_matrix(self):
+        self.logger.results('confusion matrix:\n%s\n'%confusion_matrix(self.ytest, self.predictions))
+
+    def svm_f1_score(self):
+        self.logger.results('f1 score: %s'%f1_score(self.ytest, self.predictions, average='binary'))
+
+    def svm_precision_score(self):
+        self.logger.results('precision: %s'%precision_score(self.ytest, self.predictions, average='binary'))
+
+    def svm_recall_score(self):
+        self.logger.results('recall: %s'%recall_score(self.ytest, self.predictions, average='binary'))
+
 if __name__ == "__main__":
 #temp driver
 #TODO create driver - controller py

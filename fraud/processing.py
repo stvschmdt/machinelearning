@@ -108,3 +108,13 @@ class Processor(object):
         self.logger.info("[proc] transactions test dataset: %s"%len(X_test))
         self.logger.info("[proc] total transactions: %s"%(len(X_train)+len(X_test)))
         return X_train, X_test, y_train, y_test
+
+    def cross_validation_plus(self, xvars, yvars, test_split, val_split, rand_state):
+        X_train, X_test, y_train, y_test = train_test_split(xvars, yvars, test_size=test_split, random_state=rand_state) 
+        X_test, X_validate, y_test, y_validate = train_test_split(X_test, y_test, test_size=val_split, random_state=rand_state) 
+        self.logger.info("[proc] transactions train dataset: %s"%len(X_train))
+        self.logger.info("[proc] transactions test dataset: %s"%len(X_test))
+        self.logger.info("[proc] transactions validation dataset: %s"%len(X_validate))
+        self.logger.info("[proc] total transactions: %s"%(len(X_train)+len(X_test)+len(X_validate)))
+        return X_train, X_test, X_validate, y_train, y_test, y_validate
+

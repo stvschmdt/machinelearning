@@ -17,7 +17,6 @@ class LogReg(Model):
         Model.__init__(self, params, debug)
         self.name = name
 
-    #TODO move this to model
     def printing_Kfold_scores(self, x_train_data,y_train_data):
         fold = KFold(len(y_train_data),5,shuffle=False) 
 
@@ -62,7 +61,6 @@ class LogReg(Model):
         
         return best_c
 
-    #TODO move this to model
     def logistic_regression(self, xtrain, xtest, ytrain, ytest, c, penalty='l1'):
         lr = LogisticRegression(C=c, penalty=penalty)
         lr.fit(xtrain,ytrain.values.ravel())
@@ -75,7 +73,6 @@ class LogReg(Model):
         self.logger.results("Recall metric for test set: %f"%(cnfmatrix[1,1]/(cnfmatrix[1,0]+cnfmatrix[1,1])))
         return ypredict
 
-    #TODO move this to model class
     def get_roc_curve(self, xtrain, xtest, ytrain, ytest, c, penalty='l1'):
         lr = LogisticRegression(C = c, penalty = 'l1')
         y_pred_score = lr.fit(xtrain, ytrain.values.ravel()).decision_function(xtest.values)
