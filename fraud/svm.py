@@ -1,6 +1,6 @@
 from sklearn import svm
 from sklearn.grid_search import GridSearchCV
-from sklearn.metrics import confusion_matrix, f1_score, recall_score, precision_score
+from sklearn.metrics import confusion_matrix, f1_score, recall_score, precision_score, roc_curve, auc
 
 
 from model import Model
@@ -28,6 +28,7 @@ class SVM(Model):
         self.svm_precision_score()
         self.svm_recall_score()
         self.svm_f1_score()
+        self.svm_auc()
 
     def grid_c_vals(self, l_c):
         self.c_vals = l_c
@@ -66,6 +67,10 @@ class SVM(Model):
 
     def svm_recall_score(self):
         self.logger.results('recall: %s'%recall_score(self.ytest, self.predictions, average='binary'))
+
+    def svm_auc(self):
+        fpr, tpr, thresholds = roc_curve(self.ytest, self.predictions)
+        self.logger.results('auc: %s'%auc(fpr,tpr))
 
 if __name__ == "__main__":
 #temp driver
