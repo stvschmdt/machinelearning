@@ -25,9 +25,11 @@ import argparse
 import sys
 
 from tensorflow.examples.tutorials.mnist import input_data
-
+import numpy as np
 import tensorflow as tf
 
+from processing import Processor
+from logger import Logging
 FLAGS = None
 
 
@@ -35,19 +37,34 @@ def main(_):
   # Import data
   mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
 
-  # Create the model
-  x = tf.placeholder(tf.float32, [None, 784])
-  W = tf.Variable(tf.zeros([784, 10]))
-  b = tf.Variable(tf.zeros([10]))
+  CSV_FILE = '~/store/fraud_data/creditcard.csv'
+  YCOL = 'Class'
+  logger = Logging()
+  proc = Processor()
+
+
+#TODO make this test suite
+  data = proc.load_csv(CSV_FILE)
+  data = proc.normalize_col(data, 'Amount')
+  data = data.drop(['Time'],axis=1)
+  X = proc.get_xvals(data, YCOL)
+  y = proc.get_yvals(data, YCOL)
+#print data.describe()
+  Xu, yu = proc.under_sample(data, YCOL)
+  Xu_train, Xu_test, yu_train, yu_test = proc.cross_validation_sets(Xu, yu,.3,0)
+  X_train, X_test, y_train, y_test = proc.cross_validation_sets(X, y,.3,0)
+  x = tf.placeholder(tf.float32, [None, 29])
+  W = tf.Variable(tf.zeros([29, 1]))
+  b = tf.Variable(tf.zeros([1]))
   y = tf.matmul(x, W) + b
 
   # Define loss and optimizer
-  y_ = tf.placeholder(tf.float32, [None, 10])
+  y_ = tf.placeholder(tf.float32, [None, 1])
 
   # The raw formulation of cross-entropy,
   #
   #   tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.nn.softmax(y)),
-  #                                 reduction_indices=[1]))
+  #                             )    reduction_indices=[1]))
   #
   # can be numerically unstable.
   #
@@ -60,16 +77,20 @@ def main(_):
   sess = tf.InteractiveSession()
   tf.global_variables_initializer().run()
   # Train
-  for _ in range(1000):
-    batch_xs, batch_ys = mnist.train.next_batch(100)
-    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+  for i in range(1):
+    #batch_xs, batch_ys = mnist.train.next_batch(100)
+    batch_xs, batch_ys = X_train, y_train.iloc[:,0:].values
 
+    #print(mnist.test.images.shape, mnist.test.labels.shape, mnist.train.labels.shape, batch_ys.shape)
+    #if True:
+        #return
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
   # Test trained model
   correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-  print('accuracy: %s'%sess.run(accuracy, feed_dict={x: mnist.test.images,
-                                      y_: mnist.test.labels}))
-
+  print('accuracy: %s'%sess.run(accuracy, feed_dict={x: X_test,
+      y_: y_test.iloc[:,0:].values}))
+  
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_dir', type=str, default='/tmp/tensorflow/mnist/input_data',
