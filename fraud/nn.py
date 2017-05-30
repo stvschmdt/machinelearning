@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 
-"""A very simple MNIST classifier.
+"""A very simple nn classifier.
 See extensive documentation at
 http://tensorflow.org/tutorials/mnist/beginners/index.md
 """
@@ -31,12 +31,10 @@ import tensorflow as tf
 from processing import Processor
 from logger import Logging
 FLAGS = None
-
+import ipdb
 
 def main(_):
   # Import data
-  mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-
   CSV_FILE = '~/store/fraud_data/creditcard.csv'
   YCOL = 'Class'
   logger = Logging()
@@ -70,27 +68,41 @@ def main(_):
   #
   # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
   # outputs of 'y', and then average across the batch.
-  cross_entropy = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-  train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+  #cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+
+  #cross_entropy = -tf.reduce_sum(y_*tf.log(tf.clip_by_value(y,1e-10,1.0)))
+  cross_entropy = tf.reduce_sum(tf.square(tf.subtract(y_,y)))
+  train_step = tf.train.GradientDescentOptimizer(0.1).minimize(cross_entropy)
 
   sess = tf.InteractiveSession()
   tf.global_variables_initializer().run()
   # Train
-  for i in range(1):
+  y_test = y_test.as_matrix()
+  for i in range(20):
     #batch_xs, batch_ys = mnist.train.next_batch(100)
-    batch_xs, batch_ys = X_train, y_train.iloc[:,0:].values
-
-    #print(mnist.test.images.shape, mnist.test.labels.shape, mnist.train.labels.shape, batch_ys.shape)
-    #if True:
-        #return
-    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    #batch_xs = X_train
+    #batch_ys = y_train.as_matrix()
+      sess.run(train_step, feed_dict={x: Xu_train, y_: yu_train.as_matrix()})
   # Test trained model
-  correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
-  accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-  print('accuracy: %s'%sess.run(accuracy, feed_dict={x: X_test,
-      y_: y_test.iloc[:,0:].values}))
-  
+      print("[model] training is complete ***************** ")
+      correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+      accuracy = tf.reduce_mean(tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:2000]))
+      
+      print('accuracy: %s'%sess.run(accuracy, feed_dict={x: X_test.head(2000),
+          y_: y_test[:2000]}))
+  #cp = sess.run(tf.cast(correct_prediction, tf.float32), feed_dict={x: X_test.head(2000), y_: y_test[:2000]})
+  #lacc = tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:2000])
+  #cp = sess.run(lacc, feed_dict={x: X_test.head(2000), y_ : y_test[:2000]})
+  #count = 0
+  #for idx, c in enumerate(cp):
+      #if c != y_test[idx]:
+          ##print(idx, c, y_test[idx])
+          #continue
+      #else:
+          #count +=1
+  #print((count/float(2000)))
+  sess.close()
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--data_dir', type=str, default='/tmp/tensorflow/mnist/input_data',
