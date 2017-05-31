@@ -8,11 +8,17 @@ loans - kaggle load default challenge data
 /store - actual unzipped data housing (local host)
 
 design document:
+
 ############################
+
 driver ->
+
 loader, processing, logger, TODO config ->
+
 model -> logreg, svm, nn(2) ->
+
 TODO output, TODO save
+
 ############################
 
 
