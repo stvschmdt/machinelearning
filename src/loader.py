@@ -6,7 +6,7 @@ import numpy as np
 def reader():
     d_images = []
     c_images = []
-    for root, dirnames, filenames in os.walk("train/"):
+    for root, dirnames, filenames in os.walk("../images/train/"):
         for filename in filenames:
             if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
                 filepath = os.path.join(root, filename)

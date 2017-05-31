@@ -82,17 +82,17 @@ def main(_):
     #batch_xs, batch_ys = mnist.train.next_batch(100)
     #batch_xs = X_train
     #batch_ys = y_train.as_matrix()
-      sess.run(train_step, feed_dict={x: Xu_train, y_: yu_train.as_matrix()})
+      sess.run(train_step, feed_dict={x: X_train, y_: y_train.as_matrix()})
   # Test trained model
       print("[model] training is complete ***************** ")
       correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
-      accuracy = tf.reduce_mean(tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:2000]))
+      accuracy = tf.reduce_mean(tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:10000]))
       
-      print('accuracy: %s'%sess.run(accuracy, feed_dict={x: X_test.head(2000),
-          y_: y_test[:2000]}))
-  #cp = sess.run(tf.cast(correct_prediction, tf.float32), feed_dict={x: X_test.head(2000), y_: y_test[:2000]})
-  #lacc = tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:2000])
-  #cp = sess.run(lacc, feed_dict={x: X_test.head(2000), y_ : y_test[:2000]})
+      print('accuracy: %s'%sess.run(accuracy, feed_dict={x: X_test.head(10000),
+          y_: y_test[:10000]}))
+  #cp = sess.run(tf.cast(correct_prediction, tf.float32), feed_dict={x: X_test.head(10000), y_: y_test[:10000]})
+  #lacc = tf.subtract(tf.cast(correct_prediction, tf.float32), y_test[:10000])
+  #cp = sess.run(lacc, feed_dict={x: X_test.head(10000), y_ : y_test[:10000]})
   #count = 0
   #for idx, c in enumerate(cp):
       #if c != y_test[idx]:
@@ -100,7 +100,7 @@ def main(_):
           #continue
       #else:
           #count +=1
-  #print((count/float(2000)))
+  #print((count/float(10000)))
   sess.close()
 
 if __name__ == '__main__':

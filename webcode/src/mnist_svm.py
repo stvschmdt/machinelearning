@@ -14,6 +14,7 @@ from sklearn import svm
 
 def svm_baseline():
     training_data, validation_data, test_data = mnist_loader.load_data()
+    print training_data[0][0].shape, training_data[0][0].shape
     # train
     clf = svm.SVC()
     clf.fit(training_data[0], training_data[1])
