@@ -25,10 +25,13 @@ from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import time
 import ipdb
+import pandas as pd
+import numpy as np
 
 FLAGS = None
 
-
+from logger import Logging
+from reader import Reader
 
 def input_fn(data_set, x_vals, y_vals):
   '''input dataframe, x cols and y col
@@ -64,7 +67,20 @@ def max_pool_2x2(x):
 def main(_):
   # Import data
   mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-
+  rdr = Reader()
+  rdr.read_images('../../store/images_data/train/', 'dog', True, True)
+  xdf = pd.DataFrame(rdr.d_images)
+  x2df = pd.DataFrame(rdr.c_images)
+  xdf.columns = [ 'x%s'%x for x in range(xdf.shape[1]) ]
+  x2df.columns = [ 'x%s'%x for x in range(x2df.shape[1]) ]
+  xdf['y'] = 1
+  x2df['y'] = 1
+  print(mnist.train.images.shape)
+  print(xdf.shape, x2df.shape)
+  xdf = pd.concat([xdf, x2df])
+  print(xdf.shape)
+  if True:
+      return
   # Create the model
   x = tf.placeholder(tf.float32, [None, 784])
   W = tf.Variable(tf.zeros([784, 10]))
@@ -117,9 +133,9 @@ def main(_):
   sess.run(tf.global_variables_initializer())
   
   # Train
-  for i in range(5000):
+  for i in range(1000):
     batch = mnist.train.next_batch(50)
-    if i%1000 == 0:
+    if i%100 == 0:
       train_accuracy = accuracy.eval(feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
       print("step %d, training accuracy %g"%(i, train_accuracy))
     train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
