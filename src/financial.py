@@ -56,7 +56,7 @@ class Finance(object):
             plt.clf()
             Image.open('/home/ubuntu/store/fin_data/temp.png').save('/home/ubuntu/store/fin_data/%s.jpg'%(begin),'JPEG')
 
-    def write_csv(d):
+    def write_csv(self,d):
         with open('/home/ubuntu/store/fin_data/y_vals.csv', 'w') as f:
             w = csv.writer(f)
             w.writerows(d.items())
