@@ -72,11 +72,12 @@ def vectorized(j):
 
 def main(_):
   # Import data
+  start_time = time.time()
   rdr = Reader()
   rdr.read_images('/home/ubuntu/store/fin_data', 'csv',True, False)
   xvals = np.array(rdr.c_images)
   yholder = {}
-  with open('/home/ubuntu/store/fin_data/y_vals.csv', 'r') as f:
+  with open('/home/ubuntu/store/fin_data/99999.y_vals.csv', 'r') as f:
     r = csv.reader(f)
     for row in r:
       yholder[int(row[0])] = float(row[1])
@@ -87,7 +88,7 @@ def main(_):
   #traindata, testdata = train_test_split(xvals, test_size=.25)
   traindata = xvals.loc[:1500]
   testdata = xvals.loc[1500:]
-  print('train size: %s test size: %s'%(len(traindata),len(testdata)))
+  print('read time: %s train size: %s test size: %s'%((time.time()-start_time),len(traindata),len(testdata)))
   x = tf.placeholder(tf.float32, [None, 784])
   W = tf.Variable(tf.zeros([784, 1]))
   b = tf.Variable(tf.zeros([1]))
@@ -156,6 +157,7 @@ def main(_):
   #init = tf.initialize_all_variables()
   #sess.run(init)
   sess.run(tf.global_variables_initializer())
+  start_time = time.time()
   #batch = tf.train.batch([xtrain, ytrain], batch_size=100)
   for i in range(3000):
       mini_batch_size = 50
@@ -170,7 +172,8 @@ def main(_):
             #print(yvals.shape, iteration) 
             train_step.run(feed_dict={x: batchx, y_: yvals, keep_prob: 0.5})
       #monitoring condition
-      #if i%100 == 0:
+      if i%100 == 0:
+        print('time elapsed at iteration %s: %s'%(i, time.time() - start_time))
         #train_accuracy = accuracy.eval(feed_dict={x:batchx, y_: yvals, keep_prob: 1.0})
         #print("step %d, training accuracy %g"%(i, train_accuracy))
         #test_accuracy = accuracy.eval(feed_dict={x:xtest, y_: ytvals, keep_prob: 1.0})
