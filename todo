@@ -1,0 +1,13 @@
+NN for trading
+use reader.py and finance.py
+N day rolling ave with bollinger band graphs
+data set X, y:
+X = day[0:N] as jpeg 28x28, y = day[N]
+X = plt.savefig(Adj_Close, EWMA_Close, Upper_Bollinger, Lower_Bollinger)
+.
+.
+.
+'curr' day. 
+num training sets = timeframe end - timeframe state - N -1
+plt.savefig(Adj_Close, EWMA_Close, Upper_Bollinger, Lower_Bollinger), Adj_Close[N]
+MSE loss function
