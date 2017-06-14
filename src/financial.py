@@ -5,6 +5,7 @@ import Image
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import time
+import csv
 
 from logger import Logging
 
