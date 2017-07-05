@@ -1,16 +1,9 @@
-# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# ==============================================================================
+# Author: Steve Schmidt
+# Classes: FinNet()
+# Abstract 2-D Image, 2 Hidden Layer  Convolutional Net with Max Pooling
+# Intended use with financial ewma n day data, bollinger bands
+# Potential use - any grayscale image classifier
 # ==============================================================================
 
 from __future__ import absolute_import
@@ -44,8 +37,8 @@ class FinNet(object):
       self.import_data(params)
       self.init_test_data(params)
       self.create_net(params)
-      self.init_net(params)
       self.define_loss(params)
+      self.init_net(params)
       self.nn_train(params)
 
 
@@ -77,7 +70,8 @@ class FinNet(object):
           self.x = tf.placeholder(tf.float32, [None, 784])
           self.W = tf.Variable(tf.zeros([784, 1]))
           self.b = tf.Variable(tf.zeros([1]))
-          self.y = tf.matmul(x, W) + b
+          self.y = tf.matmul(self.x, self.W) + self.b
+  
   def define_loss(self, params):
       # Define loss and optimizer
       self.y_ = tf.placeholder(tf.float32, [None, 1])
@@ -87,7 +81,7 @@ class FinNet(object):
           # create the convolutional hidden layer sizes - make even more generic in future
           self.W_conv1 = self.weight_variable([5, 5, 1, 32])
           self.b_conv1 = self.bias_variable([32])
-          self. x_image = tf.reshape(x, [-1,28,28,1])
+          self.x_image = tf.reshape(self.x, [-1,28,28,1])
           # relu
           self.h_conv1 = tf.nn.relu(self.conv2d(self.x_image, self.W_conv1) + self.b_conv1)
           # max pool
@@ -140,14 +134,14 @@ class FinNet(object):
       # setup tf session
 
 
-  def weight_variable(shape):
+  def weight_variable(self, shape):
       '''input shape of weight in the form [input, output]
          output Variable tf holder
       '''
       initial = tf.truncated_normal(shape, stddev=0.1)
       return tf.Variable(initial)
 
-  def bias_variable(shape):
+  def bias_variable(self, shape):
       '''input shape of bias in the form [input, output]
          output Variable tf holder
       '''
@@ -161,7 +155,7 @@ class FinNet(object):
           #sess.run(init)
           sess.run(tf.global_variables_initializer())
           self.start_time = time.time()
-          self.mini_batch_size = 500
+          self.mini_batch_size = 200
           self.iters = 1000
           #batch = tf.train.batch([xtrain, ytrain], batch_size=100)
           for i in range(self.iters):
@@ -174,18 +168,18 @@ class FinNet(object):
                         
                     yvals = np.array(batchy).reshape((len(batchy),1))
                     #print(yvals.shape, iteration) 
-                    self.train_step.run(feed_dict={x: batchx, y_: yvals, keep_prob: 0.5})
+                    self.train_step.run(feed_dict={self.x: batchx, self.y_: yvals, self.keep_prob: 0.5})
               #monitoring condition
               if i%100 == 0:
-                print('time elapsed at iteration %s: %s'%(i, time.time() - start_time))
+                print('time elapsed at iteration %s: %s'%(i, time.time() - self.start_time))
                 #train_accuracy = accuracy.eval(feed_dict={x:batchx, y_: yvals, keep_prob: 1.0})
                 #print("step %d, training accuracy %g"%(i, train_accuracy))
                 #test_accuracy = accuracy.eval(feed_dict={x:xtest, y_: ytvals, keep_prob: 1.0})
                 #print("step %d, test accuracy %g"%(i, test_accuracy))
           #Test
           #print("final test accuracy %g"%accuracy.eval(feed_dict={x: xtest, y_: ytvals, keep_prob: 1.0}))  
-          feed_dict={x: self.xtest, self.keep_prob:1.0}
-          classification = self.y_conv.eval(self.feed_dict)
+          feed_dict={self.x: self.xtest, self.keep_prob:1.0}
+          classification = self.y_conv.eval(feed_dict)
           print('size: %s %s'%(len(classification), self.ytest.shape))
           sum1 = 0.0
           sum2 = 0.0
@@ -196,14 +190,14 @@ class FinNet(object):
           print(sum1, sum1/float((len(self.ytest))), sum2/float(len(self.ytest)))
           print('***************************finished******************************')
 
-  def conv2d(x, W):
+  def conv2d(self,x, W):
       return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
-  def max_pool_2x2(x):
+  def max_pool_2x2(self,x):
       return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                             strides=[1, 2, 2, 1], padding='SAME')
 
-  def vectorized(j):
+  def vectorized(self,j):
       e = np.zeros((2,1))
       e[int(j)] = 1.0
       return e
