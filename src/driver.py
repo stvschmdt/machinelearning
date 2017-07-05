@@ -14,6 +14,7 @@ from model import Model
 from processing import Processor
 from svm import SVM
 from logreg import LogReg
+from loader import Loader
 
 
 if __name__ == '__main__':
@@ -64,3 +65,7 @@ if __name__ == '__main__':
     if args.SVML_DRIVE:
         sv = SVM()
         sv.svm_run(X_train, X_test, y_train, y_test)
+
+    loader = Loader('AAPL','2016-11-01', '2016-11-30')
+    aapl = loader.get_data('AAPL')
+    print aapl.data

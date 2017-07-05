@@ -1,0 +1,454 @@
+[log] started 2017-07-05 11:50:41.380186
+[info] 2017-07-05 11:50:54.487466 read 0/1000 csv/not csv images
+[info] 2017-07-05 11:51:01.633943 read 0 dog and 1546 cat images
+read time: 20.2721800804 train size: 1501 test size: 46
+time elapsed at iteration 0: 0.655075073242
+time elapsed at iteration 100: 21.961794138
+time elapsed at iteration 200: 43.243240118
+time elapsed at iteration 300: 64.6201491356
+time elapsed at iteration 400: 86.011341095
+time elapsed at iteration 500: 107.416396141
+time elapsed at iteration 600: 128.808318138
+time elapsed at iteration 700: 150.228302956
+time elapsed at iteration 800: 171.593169928
+time elapsed at iteration 900: 192.987051964
+size: 46 (46,)
+(array([ 110.07537079], dtype=float32), 105.15974399999999) delta: [-4.91562653]
+(array([ 103.93717194], dtype=float32), 105.27901299999999) delta: [ 1.34184265]
+(array([ 102.35982513], dtype=float32), 105.269079) delta: [ 2.90925598]
+(array([ 104.37311554], dtype=float32), 106.074174) delta: [ 1.70105743]
+(array([ 101.23530579], dtype=float32), 105.48774099999999) delta: [ 4.25243378]
+(array([ 104.00099182], dtype=float32), 105.03052599999999) delta: [ 1.02953339]
+(array([ 104.04691315], dtype=float32), 104.55343499999999) delta: [ 0.50652313]
+(array([ 107.1807785], dtype=float32), 107.028364) delta: [-0.15241241]
+(array([ 113.15932465], dtype=float32), 108.896984) delta: [-4.26234436]
+(array([ 103.40259552], dtype=float32), 108.33043400000001) delta: [ 4.92784119]
+(array([ 104.35263062], dtype=float32), 109.324382) delta: [ 4.97174835]
+(array([ 102.57019043], dtype=float32), 110.447549) delta: [ 7.87735748]
+(array([ 102.1669693], dtype=float32), 109.145471) delta: [ 6.97850037]
+(array([ 103.22155762], dtype=float32), 110.28851399999999) delta: [ 7.06695557]
+(array([ 99.77513885], dtype=float32), 107.88316) delta: [ 8.1080246]
+(array([ 97.42951202], dtype=float32), 108.00243700000001) delta: [ 10.57292175]
+(array([ 95.9023819], dtype=float32), 108.36025100000001) delta: [ 12.45787048]
+(array([ 96.81303406], dtype=float32), 109.77166399999999) delta: [ 12.95863342]
+(array([ 98.54574585], dtype=float32), 111.36198) delta: [ 12.81623077]
+(array([ 95.31926727], dtype=float32), 111.42161399999999) delta: [ 16.10234833]
+(array([ 95.80757904], dtype=float32), 109.18523) delta: [ 13.3776474]
+(array([ 99.24593353], dtype=float32), 106.829577) delta: [ 7.58364105]
+(array([ 105.63522339], dtype=float32), 106.26302700000001) delta: [ 0.62779999]
+(array([ 101.20938873], dtype=float32), 106.48168899999999) delta: [ 5.27230072]
+(array([ 107.04553223], dtype=float32), 105.32871299999999) delta: [-1.71681976]
+(array([ 103.59654999], dtype=float32), 105.04046699999999) delta: [ 1.44391632]
+(array([ 105.08515167], dtype=float32), 104.44410000000001) delta: [-0.64105225]
+(array([ 112.77418518], dtype=float32), 103.718514) delta: [-9.05567169]
+(array([ 110.86958313], dtype=float32), 97.228031999999999) delta: [-13.64154816]
+(array([ 113.98028564], dtype=float32), 94.256129000000001) delta: [-19.72415924]
+(array([ 107.25932312], dtype=float32), 93.172720999999996) delta: [-14.08660126]
+(array([ 102.73031616], dtype=float32), 93.073328000000004) delta: [-9.65699005]
+(array([ 113.15302277], dtype=float32), 94.604008999999991) delta: [-18.54901123]
+(array([ 118.13386536], dtype=float32), 93.620001999999999) delta: [-24.51386261]
+(array([ 122.74311066], dtype=float32), 93.239998) delta: [-29.50311279]
+(array([ 118.69609833], dtype=float32), 92.720000999999996) delta: [-25.97609711]
+(array([ 121.88400269], dtype=float32), 92.790001000000004) delta: [-29.09400177]
+(array([ 105.07363129], dtype=float32), 93.419997999999993) delta: [-11.65363312]
+(array([ 95.10831451], dtype=float32), 92.510002) delta: [-2.59831238]
+(array([ 95.03948212], dtype=float32), 90.339995999999999) delta: [-4.69948578]
+(array([ 104.97392273], dtype=float32), 90.519997000000004) delta: [-14.45392609]
+(array([ 101.93701935], dtype=float32), 93.879997000000003) delta: [-8.05702209]
+(array([ 99.26883698], dtype=float32), 93.489998) delta: [-5.77883911]
+(array([ 97.77753448], dtype=float32), 94.559997999999993) delta: [-3.21753693]
+(array([ 94.05019379], dtype=float32), 94.199996999999996) delta: [ 0.14980316]
+(array([ 99.64796448], dtype=float32), 95.220000999999996) delta: [-4.42796326]
+[-115.34183502] [-2.50743127] [ 136.22254944]
+***************************finished******************************
+[log] started 2017-07-05 11:56:12.062776
+[info] 2017-07-05 11:56:25.251543 read 0/1000 csv/not csv images
+[info] 2017-07-05 11:56:32.461708 read 0 dog and 1546 cat images
+read time: 20.4162869453 train size: 1501 test size: 46
+time elapsed at iteration 0: 0.744679927826
+time elapsed at iteration 100: 30.2402968407
+time elapsed at iteration 200: 59.6942670345
+time elapsed at iteration 300: 89.1912939548
+time elapsed at iteration 400: 118.634721994
+time elapsed at iteration 500: 148.468173027
+time elapsed at iteration 600: 182.089655876
+time elapsed at iteration 700: 218.861555815
+time elapsed at iteration 800: 255.810508013
+time elapsed at iteration 900: 292.720955849
+size: 46 (46,)
+(array([ 109.8457489], dtype=float32), 105.15974399999999) delta: [-4.68600464]
+(array([ 107.26646423], dtype=float32), 105.27901299999999) delta: [-1.98744965]
+(array([ 112.78114319], dtype=float32), 105.269079) delta: [-7.51206207]
+(array([ 100.62852478], dtype=float32), 106.074174) delta: [ 5.44564819]
+(array([ 92.24020386], dtype=float32), 105.48774099999999) delta: [ 13.24753571]
+(array([ 99.26730347], dtype=float32), 105.03052599999999) delta: [ 5.76322174]
+(array([ 96.63090515], dtype=float32), 104.55343499999999) delta: [ 7.92253113]
+(array([ 97.82990265], dtype=float32), 107.028364) delta: [ 9.19846344]
+(array([ 92.00785065], dtype=float32), 108.896984) delta: [ 16.88912964]
+(array([ 95.92996216], dtype=float32), 108.33043400000001) delta: [ 12.40047455]
+(array([ 109.23377991], dtype=float32), 109.324382) delta: [ 0.09059906]
+(array([ 105.65224457], dtype=float32), 110.447549) delta: [ 4.79530334]
+(array([ 111.33844757], dtype=float32), 109.145471) delta: [-2.19297791]
+(array([ 113.47462463], dtype=float32), 110.28851399999999) delta: [-3.18611145]
+(array([ 108.30079651], dtype=float32), 107.88316) delta: [-0.41763306]
+(array([ 105.71142578], dtype=float32), 108.00243700000001) delta: [ 2.291008]
+(array([ 100.04898834], dtype=float32), 108.36025100000001) delta: [ 8.31126404]
+(array([ 94.38845825], dtype=float32), 109.77166399999999) delta: [ 15.38320923]
+(array([ 96.69689178], dtype=float32), 111.36198) delta: [ 14.66508484]
+(array([ 104.14363861], dtype=float32), 111.42161399999999) delta: [ 7.27797699]
+(array([ 102.78353882], dtype=float32), 109.18523) delta: [ 6.40168762]
+(array([ 101.64130402], dtype=float32), 106.829577) delta: [ 5.18827057]
+(array([ 102.70348358], dtype=float32), 106.26302700000001) delta: [ 3.55953979]
+(array([ 107.82996368], dtype=float32), 106.48168899999999) delta: [-1.34827423]
+(array([ 106.55116272], dtype=float32), 105.32871299999999) delta: [-1.22245026]
+(array([ 98.74440002], dtype=float32), 105.04046699999999) delta: [ 6.29606628]
+(array([ 101.16577911], dtype=float32), 104.44410000000001) delta: [ 3.27832031]
+(array([ 104.28807831], dtype=float32), 103.718514) delta: [-0.56956482]
+(array([ 105.00367737], dtype=float32), 97.228031999999999) delta: [-7.7756424]
+(array([ 111.31164551], dtype=float32), 94.256129000000001) delta: [-17.0555191]
+(array([ 109.41744995], dtype=float32), 93.172720999999996) delta: [-16.24472809]
+(array([ 104.4643631], dtype=float32), 93.073328000000004) delta: [-11.39103699]
+(array([ 120.00798035], dtype=float32), 94.604008999999991) delta: [-25.40396881]
+(array([ 122.26031494], dtype=float32), 93.620001999999999) delta: [-28.64031219]
+(array([ 118.38407898], dtype=float32), 93.239998) delta: [-25.14408112]
+(array([ 122.70573425], dtype=float32), 92.720000999999996) delta: [-29.98573303]
+(array([ 121.73725891], dtype=float32), 92.790001000000004) delta: [-28.947258]
+(array([ 104.13785553], dtype=float32), 93.419997999999993) delta: [-10.71785736]
+(array([ 104.67567444], dtype=float32), 92.510002) delta: [-12.1656723]
+(array([ 100.65189362], dtype=float32), 90.339995999999999) delta: [-10.31189728]
+(array([ 98.72648621], dtype=float32), 90.519997000000004) delta: [-8.20648956]
+(array([ 98.38085938], dtype=float32), 93.879997000000003) delta: [-4.50086212]
+(array([ 99.51065063], dtype=float32), 93.489998) delta: [-6.02065277]
+(array([ 97.55306244], dtype=float32), 94.559997999999993) delta: [-2.99306488]
+(array([ 87.41869354], dtype=float32), 94.199996999999996) delta: [ 6.78130341]
+(array([ 103.03999329], dtype=float32), 95.220000999999996) delta: [-7.81999207]
+[-121.26065826] [-2.63610125] [ 148.8681488]
+***************************finished******************************
+[log] started 2017-07-05 12:04:51.023294
+[info] 2017-07-05 12:05:14.956955 read 0/1000 csv/not csv images
+[info] 2017-07-05 12:05:28.034486 read 0 dog and 1546 cat images
+read time: 37.0374860764 train size: 1501 test size: 46
+Device mapping:
+/job:localhost/replica:0/task:0/gpu:0 -> device: 0, name: Tesla K80, pci bus id: 0000:00:1e.0
+Variable_9/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+beta2_power: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+beta2_power/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+beta2_power/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+beta1_power: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+beta1_power/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+beta1_power/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Prod_1: (Prod): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Maximum: (Maximum): /job:localhost/replica:0/task:0/cpu:0
+gradients/Fill: (Fill): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+Sub_1: (Sub): /job:localhost/replica:0/task:0/cpu:0
+Slice_1/begin: (Pack): /job:localhost/replica:0/task:0/cpu:0
+Sub: (Sub): /job:localhost/replica:0/task:0/cpu:0
+Slice/begin: (Pack): /job:localhost/replica:0/task:0/cpu:0
+Sub_2: (Sub): /job:localhost/replica:0/task:0/cpu:0
+Slice_2/size: (Pack): /job:localhost/replica:0/task:0/cpu:0
+Variable_9: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_8: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3/TruncatedNormal: (TruncatedNormal): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3: (Add): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform/sub: (Sub): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Shape_1: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Variable_7: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_6: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2/TruncatedNormal: (TruncatedNormal): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2: (Add): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_5: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_4: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1/TruncatedNormal: (TruncatedNormal): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1: (Add): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_3: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable_2: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal/TruncatedNormal: (TruncatedNormal): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal: (Add): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+ArgMax_1: (ArgMax): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Shape_2: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Slice_1: (Slice): /job:localhost/replica:0/task:0/cpu:0
+concat_1: (ConcatV2): /job:localhost/replica:0/task:0/cpu:0
+Reshape_3: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+Variable_1: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable_1/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable_1/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Variable: (VariableV2): /job:localhost/replica:0/task:0/cpu:0
+Variable/read: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Variable/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+init: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Conv2D: (Conv2D): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+add_1: (Add): /job:localhost/replica:0/task:0/cpu:0
+Relu: (Relu): /job:localhost/replica:0/task:0/cpu:0
+MaxPool: (MaxPool): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Conv2D_1: (Conv2D): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+add_2: (Add): /job:localhost/replica:0/task:0/cpu:0
+Relu_1: (Relu): /job:localhost/replica:0/task:0/cpu:0
+MaxPool_1: (MaxPool): /job:localhost/replica:0/task:0/cpu:0
+gradients/Reshape_1_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+MatMul_1: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+add_3: (Add): /job:localhost/replica:0/task:0/cpu:0
+Relu_2: (Relu): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Neg: (Neg): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/RealDiv_1: (RealDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/RealDiv_2: (RealDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+dropout/div: (RealDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+dropout/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform/RandomUniform: (RandomUniform): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform: (Add): /job:localhost/replica:0/task:0/cpu:0
+dropout/add: (Add): /job:localhost/replica:0/task:0/cpu:0
+dropout/Floor: (Floor): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Shape_1: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+dropout/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+MatMul_2: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+add_4: (Add): /job:localhost/replica:0/task:0/cpu:0
+ArgMax: (ArgMax): /job:localhost/replica:0/task:0/cpu:0
+Equal: (Equal): /job:localhost/replica:0/task:0/cpu:0
+Cast_1: (Cast): /job:localhost/replica:0/task:0/cpu:0
+Mean_2: (Mean): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Shape_1: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/BroadcastGradientArgs: (BroadcastGradientArgs): /job:localhost/replica:0/task:0/cpu:0
+SquaredDifference: (SquaredDifference): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Shape_1: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Prod: (Prod): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/floordiv: (FloorDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Cast: (Cast): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Tile: (Tile): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/truediv: (RealDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/sub: (Sub): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/mul_1: (Mul): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Neg: (Neg): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_9/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_2_grad/MatMul_1: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_2_grad/MatMul: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_2_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_2_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_8/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_2_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/mul_1: (Mul): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/mul_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/RealDiv: (RealDiv): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/dropout/div_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/Relu_2_grad/ReluGrad: (ReluGrad): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_7/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_1_grad/MatMul_1: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_1_grad/MatMul: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_1_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_1_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_6/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/MatMul_1_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/Reshape_1_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/MaxPool_1_grad/MaxPoolGrad: (MaxPoolGrad): /job:localhost/replica:0/task:0/cpu:0
+gradients/Relu_1_grad/ReluGrad: (ReluGrad): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_5/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/Conv2DBackpropFilter: (Conv2DBackpropFilter): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/Conv2DBackpropInput: (Conv2DBackpropInput): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_4/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/MaxPool_grad/MaxPoolGrad: (MaxPoolGrad): /job:localhost/replica:0/task:0/cpu:0
+gradients/Relu_grad/ReluGrad: (ReluGrad): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Sum_1: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Reshape_1: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Sum: (Sum): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Reshape: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_3/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/Conv2DBackpropFilter: (Conv2DBackpropFilter): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/Conv2DBackpropInput: (Conv2DBackpropInput): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/tuple/group_deps: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/tuple/control_dependency_1: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Adam/update_Variable_2/ApplyAdam: (ApplyAdam): /job:localhost/replica:0/task:0/cpu:0
+Adam/mul_1: (Mul): /job:localhost/replica:0/task:0/cpu:0
+Adam/Assign_1: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Adam/mul: (Mul): /job:localhost/replica:0/task:0/cpu:0
+Adam/Assign: (Assign): /job:localhost/replica:0/task:0/cpu:0
+Adam: (NoOp): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/tuple/control_dependency: (Identity): /job:localhost/replica:0/task:0/cpu:0
+Mean_1: (Mean): /job:localhost/replica:0/task:0/cpu:0
+Shape_1: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Slice: (Slice): /job:localhost/replica:0/task:0/cpu:0
+concat: (ConcatV2): /job:localhost/replica:0/task:0/cpu:0
+Reshape_2: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+SoftmaxCrossEntropyWithLogits: (SoftmaxCrossEntropyWithLogits): /job:localhost/replica:0/task:0/cpu:0
+Shape: (Shape): /job:localhost/replica:0/task:0/cpu:0
+Slice_2: (Slice): /job:localhost/replica:0/task:0/cpu:0
+Reshape_4: (Reshape): /job:localhost/replica:0/task:0/cpu:0
+Mean: (Mean): /job:localhost/replica:0/task:0/cpu:0
+MatMul: (MatMul): /job:localhost/replica:0/task:0/cpu:0
+add: (Add): /job:localhost/replica:0/task:0/cpu:0
+Const_6: (Const): /job:localhost/replica:0/task:0/cpu:0
+ArgMax_1/dimension: (Const): /job:localhost/replica:0/task:0/cpu:0
+ArgMax/dimension: (Const): /job:localhost/replica:0/task:0/cpu:0
+Adam/epsilon: (Const): /job:localhost/replica:0/task:0/cpu:0
+Adam/beta2: (Const): /job:localhost/replica:0/task:0/cpu:0
+Adam/beta1: (Const): /job:localhost/replica:0/task:0/cpu:0
+Adam/learning_rate: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_9/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_8/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_7/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_6/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_5/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_4/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_3/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam_1/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+Variable_2/Adam/Initializer/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+beta2_power/initial_value: (Const): /job:localhost/replica:0/task:0/cpu:0
+beta1_power/initial_value: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_1_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Conv2D_1_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_2_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_3_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/add_4_grad/Shape_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Maximum/y: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Const_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Shape_2: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Mean_1_grad/Reshape/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+gradients/Shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const_5: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const_4: (Const): /job:localhost/replica:0/task:0/cpu:0
+Slice_2/begin: (Const): /job:localhost/replica:0/task:0/cpu:0
+Sub_2/y: (Const): /job:localhost/replica:0/task:0/cpu:0
+concat_1/axis: (Const): /job:localhost/replica:0/task:0/cp

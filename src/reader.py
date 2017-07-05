@@ -14,10 +14,12 @@ class Reader():
     def read_images(self, fname, sep, grayscale=None, test=None):
         self.d_images = []
         self.c_images = []
+        self.file_labels = []
         for root, dirnames, filenames in os.walk(fname):
-            for filename in filenames:
+            for filename in sorted(filenames, key=lambda x: int(x.split('.')[0])):
                 if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
                     filepath = os.path.join(root, filename)
+                    self.file_labels.append(filename.split('.')[0])
                     image = ndimage.imread(filepath, mode="RGB")
                     image_resized = misc.imresize(image, (28, 28))
                     #check if this is from one class (dog in test)
