@@ -21,12 +21,14 @@ import ipdb
 import pandas as pd
 import numpy as np
 import csv
+import argparse
 from sklearn.cross_validation import train_test_split
 
 FLAGS = None
 
 from logger import Logging
 from reader import Reader
+
 
 
 class FinNet(object):
@@ -49,10 +51,10 @@ class FinNet(object):
   def import_data(self, params):
       # Import data
       self.rdr = Reader()
-      self.rdr.read_images('/home/ubuntu/store/fin_data', 'csv',True, False)
+      self.rdr.read_images(self.params.store, 'csv',True, False)
       self.xvals = np.array(self.rdr.c_images)
       self.yholder = {}
-      with open('/home/ubuntu/store/fin_data/99999.y_vals.csv', 'r') as f:
+      with open(self.params.filename, 'r') as f:
         r = csv.reader(f)
         for row in r:
           self.yholder[int(row[0])] = float(row[1])
@@ -66,7 +68,7 @@ class FinNet(object):
       print('read time: %s train size: %s test size: %s'%((time.time()-self.start_time),len(self.traindata),len(self.testdata)))
 
   def create_net(self, params):
-      with tf.device('/cpu:0'):
+      with tf.device('/gpu:0'):
           self.x = tf.placeholder(tf.float32, [None, 784])
           self.W = tf.Variable(tf.zeros([784, 1]))
           self.b = tf.Variable(tf.zeros([1]))
@@ -119,6 +121,9 @@ class FinNet(object):
           #define loss function and training step - Adam vs GradientDescent
           self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.y_conv))
           self.mse_loss = tf.reduce_mean(tf.squared_difference(self.y_, self.y_conv))
+          self.beta = self.params.beta
+          self.l2_reg = tf.nn.l2_loss(self.W)
+          self.mse_loss = tf.reduce_mean(self.mse_loss + self.beta * self.l2_reg)
           self.train_step = tf.train.AdamOptimizer(1e-4).minimize(self.mse_loss)
           #train_step = tf.train.GradientDescentOptimizer(1e-2).minimize(cross_entropy)
           #define correct and accuracy of the model for testing
@@ -155,11 +160,12 @@ class FinNet(object):
           #sess.run(init)
           sess.run(tf.global_variables_initializer())
           self.start_time = time.time()
-          self.mini_batch_size = 200
-          self.iters = 1000
+          self.mini_batch_size = self.params.batchsize
+          self.iters = self.params.iters
           #batch = tf.train.batch([xtrain, ytrain], batch_size=100)
           for i in range(self.iters):
-              self.traindata = self.traindata.reindex(np.random.permutation(self.traindata.index))
+              #do not shuffle time series data
+              #self.traindata = self.traindata.reindex(np.random.permutation(self.traindata.index))
               self.batches = [ self.traindata[k:k+self.mini_batch_size] for k in xrange(0,len(self.traindata), self.mini_batch_size)]
               for batch in self.batches:
                   if len(batch) == self.mini_batch_size:
@@ -168,10 +174,11 @@ class FinNet(object):
                         
                     yvals = np.array(batchy).reshape((len(batchy),1))
                     #print(yvals.shape, iteration) 
-                    self.train_step.run(feed_dict={self.x: batchx, self.y_: yvals, self.keep_prob: 0.5})
+                    #self.train_step.run(feed_dict={self.x: batchx, self.y_: yvals, self.keep_prob: 0.5})
+                    ts, mse = sess.run([self.train_step, self.mse_loss], feed_dict={self.x: batchx, self.y_: yvals, self.keep_prob: 0.5})
               #monitoring condition
-              if i%100 == 0:
-                print('time elapsed at iteration %s: %s'%(i, time.time() - self.start_time))
+              if i%(int(self.params.iters/20)) == 0:
+                  print('iter: %s/%s:   cost: %s  time: %s'%(i, self.iters, mse, time.time() - self.start_time))
                 #train_accuracy = accuracy.eval(feed_dict={x:batchx, y_: yvals, keep_prob: 1.0})
                 #print("step %d, training accuracy %g"%(i, train_accuracy))
                 #test_accuracy = accuracy.eval(feed_dict={x:xtest, y_: ytvals, keep_prob: 1.0})
@@ -180,11 +187,12 @@ class FinNet(object):
           #print("final test accuracy %g"%accuracy.eval(feed_dict={x: xtest, y_: ytvals, keep_prob: 1.0}))  
           feed_dict={self.x: self.xtest, self.keep_prob:1.0}
           classification = self.y_conv.eval(feed_dict)
-          print('size: %s %s'%(len(classification), self.ytest.shape))
+          print('test size: %s %s'%(len(classification), self.ytest.shape))
           sum1 = 0.0
           sum2 = 0.0
+          #print('predicted  -  actual  -  difference')
           for c in zip(classification, self.ytest):
-              print(c, 'delta: %s'%(c[1]-c[0]))
+              print('pred',c[0][0],'actual',c[1],'delta: %s'%(c[1]-c[0]))
               sum1 += c[1] - c[0]
               sum2 += (c[1] - c[0])**2
           print(sum1, sum1/float((len(self.ytest))), sum2/float(len(self.ytest)))
@@ -218,8 +226,12 @@ def input_fn(data_set, x_vals, y_vals):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument('--data_dir', type=str, default='/tmp/tensorflow/mnist/input_data',
-                      help='Directory for storing input data')
+  parser.add_argument('--images', type=str, dest='store',default='/home/ubuntu/store/fin_data',help='directory for storing input data')
+  parser.add_argument('--file', type=str, dest='filename',default='/home/ubuntu/store/fin_data/99999.y_vals.csv', help='data file')
+  parser.add_argument('--log', type=str, dest='output',default='output.txt', help='file to output logging')
+  parser.add_argument('--beta', dest='beta', type=float, default=0.1, help='regularization parameter')
+  parser.add_argument('--batch', dest='batchsize',default=100,type=int,help='Batch size')
+  parser.add_argument('--iters', dest='iters', default=1000,type=int,help='Number of iterations of training')
   FLAGS, unparsed = parser.parse_known_args()
   #tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
   fn = FinNet(FLAGS)

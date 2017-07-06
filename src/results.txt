@@ -451,4 +451,49 @@ Const_5: (Const): /job:localhost/replica:0/task:0/cpu:0
 Const_4: (Const): /job:localhost/replica:0/task:0/cpu:0
 Slice_2/begin: (Const): /job:localhost/replica:0/task:0/cpu:0
 Sub_2/y: (Const): /job:localhost/replica:0/task:0/cpu:0
-concat_1/axis: (Const): /job:localhost/replica:0/task:0/cp
+concat_1/axis: (Const): /job:localhost/replica:0/task:0/cpu:0
+concat_1/values_0: (Const): /job:localhost/replica:0/task:0/cpu:0
+Slice_1/size: (Const): /job:localhost/replica:0/task:0/cpu:0
+Sub_1/y: (Const): /job:localhost/replica:0/task:0/cpu:0
+Rank_2: (Const): /job:localhost/replica:0/task:0/cpu:0
+concat/axis: (Const): /job:localhost/replica:0/task:0/cpu:0
+concat/values_0: (Const): /job:localhost/replica:0/task:0/cpu:0
+Slice/size: (Const): /job:localhost/replica:0/task:0/cpu:0
+Sub/y: (Const): /job:localhost/replica:0/task:0/cpu:0
+Rank_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+Rank: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const_3: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3/stddev: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3/mean: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_3/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform/max: (Const): /job:localhost/replica:0/task:0/cpu:0
+dropout/random_uniform/min: (Const): /job:localhost/replica:0/task:0/cpu:0
+Placeholder_2: (Placeholder): /job:localhost/replica:0/task:0/cpu:0
+Reshape_1/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const_2: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2/stddev: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2/mean: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_2/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1/stddev: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1/mean: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal_1/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Reshape/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Const: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal/stddev: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal/mean: (Const): /job:localhost/replica:0/task:0/cpu:0
+truncated_normal/shape: (Const): /job:localhost/replica:0/task:0/cpu:0
+Placeholder_1: (Placeholder): /job:localhost/replica:0/task:0/cpu:0
+zeros_1: (Const): /job:localhost/replica:0/task:0/cpu:0
+zeros: (Const): /job:localhost/replica:0/task:0/cpu:0
+Placeholder: (Placeholder): /job:localhost/replica:0/task:0/cpu:0
+gradients/SquaredDifference_grad/scalar: (Const): /job:localhost/replica:0/task:0/cpu:0
+time elapsed at iteration 0: 7.70085382462
+time elapsed at iteration 100: 795.401443005
+time elapsed at iteration 200: 1454.31352401
+time elapsed at iteration 300: 1885.5096879
+time elapsed at iteration 400: 2335.75434303
+time elapsed at iteration 500: 2804.90744305
+time elapsed at iteration 600: 3262.9418509
+time elapsed at iteration 700: 3714.43964887
+time elapsed at iteration 800: 4192.39186382
