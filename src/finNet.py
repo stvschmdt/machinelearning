@@ -46,26 +46,28 @@ class FinNet(object):
 
 #params must have matrix sizes for x, W, b, y
 #filename to read
-#
 
   def import_data(self, params):
-      # Import data
-      self.rdr = Reader()
-      self.rdr.read_images(self.params.store, 'csv',True, False)
-      self.xvals = np.array(self.rdr.c_images)
-      self.yholder = {}
-      with open(self.params.filename, 'r') as f:
-        r = csv.reader(f)
-        for row in r:
-          self.yholder[int(row[0])] = float(row[1])
-      self.yvals = [self.yholder[int(x)] for x in self.rdr.file_labels]
-      self.yvals = np.array(self.yvals)
-      self.xvals = pd.DataFrame(self.xvals)
-      self.xvals['y'] = self.yvals
-      #traindata, testdata = train_test_split(xvals, test_size=.25)
-      self.traindata = self.xvals.loc[:1500]
-      self.testdata = self.xvals.loc[1500:]
-      print('read time: %s train size: %s test size: %s'%((time.time()-self.start_time),len(self.traindata),len(self.testdata)))
+      with tf.device('/cpu:0'):
+          # Import data via Reader class, retrieval in np array format
+          self.rdr = Reader()
+          self.rdr.read_images(self.params.store, 'csv',True, False)
+          self.xvals = np.array(self.rdr.c_images)
+          self.yholder = {}
+          # read
+          with open(self.params.filename, 'r') as f:
+            r = csv.reader(f)
+            for row in r:
+              self.yholder[int(row[0])] = float(row[1])
+          self.yvals = [self.yholder[int(x)] for x in self.rdr.file_labels]
+          self.yvals = np.array(self.yvals)
+          self.xvals = pd.DataFrame(self.xvals)
+          self.xvals['y'] = self.yvals
+          #traindata, testdata = train_test_split(xvals, test_size=.25)
+          train_size = int(len(self.xvals) * (1-self.params.test))
+          self.traindata = self.xvals.loc[:train_size]
+          self.testdata = self.xvals.loc[train_size:]
+          print('read time: %s train size: %s test size: %s'%((time.time()-self.start_time),len(self.traindata),len(self.testdata)))
 
   def create_net(self, params):
       with tf.device('/gpu:0'):
@@ -75,8 +77,9 @@ class FinNet(object):
           self.y = tf.matmul(self.x, self.W) + self.b
   
   def define_loss(self, params):
-      # Define loss and optimizer
-      self.y_ = tf.placeholder(tf.float32, [None, 1])
+      with tf.device('/gpu:0'):
+          # Define loss and optimizer
+          self.y_ = tf.placeholder(tf.float32, [None, 1])
 
   def init_net(self, params):
       with tf.device('/gpu:0'):
@@ -121,22 +124,23 @@ class FinNet(object):
           #define loss function and training step - Adam vs GradientDescent
           self.cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.y_conv))
           self.mse_loss = tf.reduce_mean(tf.squared_difference(self.y_, self.y_conv))
-          self.beta = self.params.beta
+          self.eta = self.params.eta
           self.l2_reg = tf.nn.l2_loss(self.W)
-          self.mse_loss = tf.reduce_mean(self.mse_loss + self.beta * self.l2_reg)
-          self.train_step = tf.train.AdamOptimizer(1e-4).minimize(self.mse_loss)
+          self.mse_loss = tf.reduce_mean(self.mse_loss + self.eta * self.l2_reg)
+          self.train_step = tf.train.AdamOptimizer(1e-3, epsilon=0.1).minimize(self.mse_loss)
           #train_step = tf.train.GradientDescentOptimizer(1e-2).minimize(cross_entropy)
           #define correct and accuracy of the model for testing
           self.correct_prediction = tf.equal(tf.argmax(self.y_conv,1), tf.argmax(self.y_,1))
           self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
           
   def init_test_data(self, params):
-      # Train
-      #ipdb.set_trace()
-      self.testdata = self.testdata.sort_index()
-      self.xtest = self.testdata[self.testdata.columns[:-1]] 
-      self.ytest = self.testdata[self.testdata.columns[-1]] 
-      # setup tf session
+      with tf.device('/cpu:0'):
+          # Train
+          #ipdb.set_trace()
+          self.testdata = self.testdata.sort_index()
+          self.xtest = self.testdata[self.testdata.columns[:-1]] 
+          self.ytest = self.testdata[self.testdata.columns[-1]] 
+          # setup tf session
 
 
   def weight_variable(self, shape):
@@ -222,16 +226,15 @@ def input_fn(data_set, x_vals, y_vals):
 
 
 
-
-
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--images', type=str, dest='store',default='/home/ubuntu/store/fin_data',help='directory for storing input data')
   parser.add_argument('--file', type=str, dest='filename',default='/home/ubuntu/store/fin_data/99999.y_vals.csv', help='data file')
   parser.add_argument('--log', type=str, dest='output',default='output.txt', help='file to output logging')
-  parser.add_argument('--beta', dest='beta', type=float, default=0.1, help='regularization parameter')
-  parser.add_argument('--batch', dest='batchsize',default=100,type=int,help='Batch size')
-  parser.add_argument('--iters', dest='iters', default=1000,type=int,help='Number of iterations of training')
+  parser.add_argument('--eta', dest='eta', type=float, default=0.1, help='regularization parameter')
+  parser.add_argument('--batch', dest='batchsize',default=100,type=int,help='batch size')
+  parser.add_argument('--iters', dest='iters', default=1000,type=int,help='number of iterations of training')
+  parser.add_argument('--test', dest='test', default=.1,type=float,help='percent of samples for testing')
   FLAGS, unparsed = parser.parse_known_args()
   #tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
   fn = FinNet(FLAGS)
