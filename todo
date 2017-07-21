@@ -1,5 +1,4 @@
 work on generalizing the 2d CNN for arbitraty images
-monitor cost function
-double check the steps involve
-reporting
 set up queueing
+set up read infile
+refactor code for abstraction
