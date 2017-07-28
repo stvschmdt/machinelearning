@@ -100,6 +100,12 @@ def one_hot(x):
     y[x] = 1.0
     return y
 
+def goodfellow_mod(x, grad, epsilon=0.05):
+    xprime =  x + np.sign(grad)*epsilon
+    xprime[ xprime < 0.0] = 0
+    xprime[ xprime > 1.0] = 0
+    return xprime
+
 
 def main(_):
   # Import data
@@ -125,8 +131,7 @@ def main(_):
   # Build the graph for the deep net
   y_conv, keep_prob = deepnn(x)
 
-  cross_entropy = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
+  cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
   train_step = tf.train.AdamOptimizer(1e-3).minimize(cross_entropy)
   correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -151,15 +156,46 @@ def main(_):
         print('step %d, training accuracy %g' % (i, train_accuracy))
       trainer, softmax = sess.run([train_step, cross_entropy],feed_dict={x: x_images, y_: x_labels, keep_prob: 0.5})
 
-    print('adversary accuracy %g' % accuracy.eval(feed_dict={x: xtest_data, y_: ytest_data, keep_prob: 1.0}))
     grads = tf.gradients(cross_entropy, [x])
     gs = sess.run(grads, feed_dict={x:xtest_data, y_:ytest_data, keep_prob: 1.0})
+    import ipdb
+    #print('gs shape: ',gs[0].shape)
+    #ipdb.set_trace()
+    real = tf.argmax(y_,1)
+    reals = real.eval(feed_dict={y_:ytest_data})
+    preds = tf.argmax(y_conv,1)
+    preds = preds.eval(feed_dict={x:xtest_data, y_:ytest_data, keep_prob:1.0})
+    cp = [ (pxl, p) for pxl, p, r in zip(xtest_data, preds, reals) if p==r ]
+    print('adversary accuracy %g' % accuracy.eval(feed_dict={x: xtest_data, y_: ytest_data, keep_prob: 1.0}))
+    print('len cp: ',len(cp))
+    #ipdb.set_trace()
+    #print(gs)
+    xpert = []
+    ypert = []
+    for eps in np.linspace(0.05,.35,num=10):
+        xpert = []
+        ypert = []
+        for idx,tp in enumerate(cp):
+          xp = goodfellow_mod(np.array(tp[0]), gs[0][idx], eps)
+          #print(xp.shape, tp[idxI][0].shape)
+          #epsilon_tester = np.array(xp)
+          #ipdb.set_trace()
+          epsilon_label = one_hot(int(tp[1]))
+          xpert.append(xp)
+          ypert.append(epsilon_label)
+          #print(xp)
+          #print(xp.shape, tp[0].shape)
+          #print(len(xp), len(mdl.true_positives), len(x_images))
+          #print(sum(tp[0]), sum(xp[0]))
+          #break
+
+        xpert = np.array(xpert)
+        ypert = np.array(ypert)
+        ypert = ypert.reshape((len(ypert), 10))
+        #ipdb.set_trace()
+        print('adversary accuracy %g' % accuracy.eval(feed_dict={x: xpert, y_: ypert, keep_prob: 1.0}))
+
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
-    print(gs, gs[0].shape)
-  
-  for tp in mdl.true_positives:
-      print(tp)
-      break
 
 
 if __name__ == '__main__':
