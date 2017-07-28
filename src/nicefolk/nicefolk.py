@@ -1,6 +1,8 @@
 # ==============================================================================
 
-"""A deep classifier using convolutional layers.
+"""an adversarial attack against a black box machine learning or artificial
+   intelligence entity. train test against an oracle -> pertrurb input vector
+   attain transferability to misclassification in original oracle model
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -9,27 +11,25 @@ from __future__ import print_function
 import argparse
 import sys
 
-from tensorflow.examples.tutorials.mnist import input_data
-
 import numpy as np
 import tensorflow as tf
 from blackbox import BlackBox
+from logger import Logging
 
 FLAGS = None
-
+logger = Logging()
 # ==============================================================================
 
 
 def deepnn(x):
   """deepnn builds the graph for a deep net for classifying digits.
   Args:
-    x: an input tensor with the dimensions (N_examples, 784), where 784 is the
-    number of pixels in a standard MNIST image.
+    x: an input tensor with the dimensions (N_examples, 784) for example
   Returns:
     A tuple (y, keep_prob). y is a tensor of shape (N_examples, 10), with values
     equal to the logits of classifying the digit into one of 10 classes (the
     digits 0-9). keep_prob is a scalar placeholder for the probability of
-    dropout.
+    dropout
   """
   # Reshape to use within a convolutional neural net.
   # Last dimension is for "features" - there is only one here, since images are
@@ -80,8 +80,7 @@ def conv2d(x, W):
 
 def max_pool_2x2(x):
   """max_pool_2x2 downsamples a feature map by 2X."""
-  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
-                        strides=[1, 2, 2, 1], padding='SAME')
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],strides=[1, 2, 2, 1], padding='SAME')
 
 
 def weight_variable(shape):
@@ -106,103 +105,94 @@ def goodfellow_mod(x, grad, epsilon=0.05):
     xprime[ xprime > 1.0] = 0
     return xprime
 
+def image_list_to_np(l_image, idx):
+    vals = [ x[idx] for x in l_image ]
+    vals = np.array(vals)
+    return vals
+
+def split_train_data(xarr, yarr, n):
+  train_images = np.array(xarr[:-n])
+  train_labels = np.array(yarr[:-n])
+  test_images =  np.array(xarr[-n:])
+  test_labels =  np.array(yarr[-n:])
+  return train_images, train_labels, test_images, test_labels
 
 def main(_):
-  # Import data
+  # import data
   mdl = BlackBox(FLAGS)
+  logger.info('obtained black box training data')
   mnist = mdl.oracle
-  x_vals = [ x[0] for x in mnist ]
-  x_vals = np.array(x_vals)
+  # translate into tensorflow style nparrays
+  x_vals = image_list_to_np(mnist, 0)
+  true_vals = image_list_to_np(mnist,2)
+  
+  # yvals converted to one hot vector
   y_vals = [ x[1] for x in mnist ]
   y_vals = [ one_hot(i) for i in y_vals]
   y_vals = np.array(y_vals)
   y_vals = y_vals.reshape((len(y_vals),10))
-  true_vals = [ x[2] for x in mnist ]
-  true_vals = np.array(true_vals)
-  
+ 
+  # Tensorflow variable setup
 
-  print('running adversarvial model')
-  # Create the model
+  # input vector
   x = tf.placeholder(tf.float32, [None, 784])
-
-  # Define loss and optimizer
+  # y output vector
   y_ = tf.placeholder(tf.float32, [None, 10])
-
-  # Build the graph for the deep net
+  # build the graph for the deep net
   y_conv, keep_prob = deepnn(x)
-
+  # define loss function -> cross entropy for now with softmax
   cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
+  # train step, 1e-4 is default, best to use -2/-3 depending on time
   train_step = tf.train.AdamOptimizer(1e-3).minimize(cross_entropy)
+  # define correct prediction vectore and accuracy comparison
   correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-
-  x_images = np.array(x_vals[:-200])
-  x_labels = np.array(y_vals[:-200])
-  xtest_data =  np.array(x_vals[-200:])
-  ytest_data =  np.array(y_vals[-200:])
-  #true_vals_test = true_vals[-200:]
-  #count = [x for x in zip(true_vals_test, ytest_data) ]
-  print(len(x_images), len(xtest_data), x_images.shape, x_labels.shape)
+ 
+  # split training and test data into nparrays
+  train_images, train_labels, test_images, test_labels =split_train_data(x_vals, y_vals, 200)
+  logger.info('training sets: %s test sets: %s ... %s %s'.format(len(train_images),len(test_images), train_images.shape, train_labels.shape))
   cnn_saver = tf.train.Saver()
   batch_size = 200
+  logger.info('starting adversarvial model training')
   with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     for i in range(20):
-      #batch = mnist.train.next_batch(50)
-      #xbatch = [ x_images[k:k+batch_size] for k in xrange(0,len(x_images), batch_size)]
-      #ybatch = [ x_labels[k:k+batch_size] for k in xrange(0,len(x_labels), batch_size)]
       if i % 100 == 0:
-        train_accuracy = accuracy.eval(feed_dict={x: x_images, y_: x_labels, keep_prob: 1.0})
-        print('step %d, training accuracy %g' % (i, train_accuracy))
-      trainer, softmax = sess.run([train_step, cross_entropy],feed_dict={x: x_images, y_: x_labels, keep_prob: 0.5})
-
+        train_accuracy = accuracy.eval(feed_dict={x: train_images, y_: train_labels, keep_prob: 1.0})
+        logger.info('step %d, training accuracy %g' % (i, train_accuracy))
+      trainer, softmax = sess.run([train_step, cross_entropy],feed_dict={x: train_images, y_: train_labels, keep_prob: 0.5})
+    logger.info('adversarial model has been trained')
     grads = tf.gradients(cross_entropy, [x])
-    gs = sess.run(grads, feed_dict={x:xtest_data, y_:ytest_data, keep_prob: 1.0})
-    import ipdb
-    #print('gs shape: ',gs[0].shape)
-    #ipdb.set_trace()
-    real = tf.argmax(y_,1)
-    reals = real.eval(feed_dict={y_:ytest_data})
-    preds = tf.argmax(y_conv,1)
-    preds = preds.eval(feed_dict={x:xtest_data, y_:ytest_data, keep_prob:1.0})
-    cp = [ (pxl, p) for pxl, p, r in zip(xtest_data, preds, reals) if p==r ]
-    print('adversary accuracy %g' % accuracy.eval(feed_dict={x: xtest_data, y_: ytest_data, keep_prob: 1.0}))
-    print('len cp: ',len(cp))
-    #ipdb.set_trace()
-    #print(gs)
-    xpert = []
-    ypert = []
-    for eps in np.linspace(0.05,.35,num=10):
-        xpert = []
-        ypert = []
-        for idx,tp in enumerate(cp):
-          xp = goodfellow_mod(np.array(tp[0]), gs[0][idx], eps)
-          #print(xp.shape, tp[idxI][0].shape)
-          #epsilon_tester = np.array(xp)
-          #ipdb.set_trace()
-          epsilon_label = one_hot(int(tp[1]))
-          xpert.append(xp)
-          ypert.append(epsilon_label)
-          #print(xp)
-          #print(xp.shape, tp[0].shape)
-          #print(len(xp), len(mdl.true_positives), len(x_images))
-          #print(sum(tp[0]), sum(xp[0]))
-          #break
+    gs = sess.run(grads, feed_dict={x:test_images, y_:test_labels, keep_prob: 1.0})
+    test_ = tf.argmax(y_,1)
+    test_vals = test_.eval(feed_dict={y_:test_labels})
+    pred_ = tf.argmax(y_conv,1)
+    pred_vals = pred_.eval(feed_dict={x:test_images, y_:test_labels, keep_prob:1.0})
+    true_pred = [ (pxl, p) for pxl, p, r in zip(test_images, pred_vals, test_vals) if p==r ]
+    logger.info('true positive test exemplars: %s'.format(len(true_pred)))
+    logger.results('adversary accuracy: %g' % (accuracy.eval(feed_dict={x: test_images, y_: test_labels, keep_prob: 1.0})))
+    xprime = []
+    yprime = []
+    for epsilon in np.linspace(0.05,.35,num=10):
+        xprime = []
+        yprime = []
+        for idx,pos in enumerate(true_pred):
+          xp = goodfellow_mod(np.array(pos[0]), gs[0][idx], epsilon)
+          prime_label = one_hot(int(pos[1]))
+          xprime.append(xp)
+          yprime.append(prime_label)
 
-        xpert = np.array(xpert)
-        ypert = np.array(ypert)
-        ypert = ypert.reshape((len(ypert), 10))
-        #ipdb.set_trace()
-        print('adversary accuracy %g' % accuracy.eval(feed_dict={x: xpert, y_: ypert, keep_prob: 1.0}))
+        xprime = np.array(xprime)
+        yprime = np.array(yprime)
+        yprime = yprime.reshape((len(yprime), 10))
+        logger.results('adversary accuracy: %g %f' % (accuracy.eval(feed_dict={x: xprime, y_: yprime, keep_prob: 1.0}), epsilon))
 
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
 
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument('--data_dir', type=str,
-                      default='/tmp/tensorflow/mnist/input_data',
-                      help='Directory for storing input data')
+  parser.add_argument('--data_dir', type=str,default='/tmp/tensorflow/mnist/input_data',help='Directory for storing input data')
   FLAGS, unparsed = parser.parse_known_args()
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 
