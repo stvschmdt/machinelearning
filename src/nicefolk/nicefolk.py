@@ -13,62 +13,11 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 import numpy as np
 import tensorflow as tf
+from blackbox import BlackBox
 
 FLAGS = None
 
 # ==============================================================================
-
-
-def simple(_):
-  # Import data
-  mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
-
-  # Create the model
-  x = tf.placeholder(tf.float32, [None, 784])
-  W = tf.Variable(tf.zeros([784, 10]))
-  b = tf.Variable(tf.zeros([10]))
-  y = tf.matmul(x, W) + b
-
-  # Define loss and optimizer
-  y_ = tf.placeholder(tf.float32, [None, 10])
-
-  # The raw formulation of cross-entropy,
-  #
-  #   tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.nn.softmax(y)),
-  #                                 reduction_indices=[1]))
-  #
-  # can be numerically unstable.
-  #
-  # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
-  # outputs of 'y', and then average across the batch.
-  cross_entropy = tf.reduce_mean(
-      tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-  train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
-  simple_saver = tf.train.Saver()
-
-  sess = tf.InteractiveSession()
-  tf.global_variables_initializer().run()
-  # Train
-  for _ in range(500):
-    batch_xs, batch_ys = mnist.train.next_batch(100)
-    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
-
-  # Test trained model
-  correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
-  accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-  cp = correct_prediction.eval(feed_dict={x: mnist.test.images, y_:mnist.test.labels})
-  preds = sess.run(tf.argmax(mnist.test.labels,1))
-  reals = tf.argmax(y,1)
-  reals = sess.run(reals, feed_dict={x:mnist.test.images})
-  oracle = []
-  for c in zip(mnist.test.images, preds, reals):
-      oracle.append(c)
-  #print(len(oracle))
-  print('****************** simple model accuracy **************')
-  print(sess.run(accuracy, feed_dict={x: mnist.test.images,y_: mnist.test.labels}))
-  simple_saver_path = simple_saver.save(sess, 'simple.ckpt')
-  return oracle
-
 
 
 def deepnn(x):
@@ -154,7 +103,8 @@ def one_hot(x):
 
 def main(_):
   # Import data
-  mnist = simple(_)
+  mdl = BlackBox(FLAGS)
+  mnist = mdl.oracle
   x_vals = [ x[0] for x in mnist ]
   x_vals = np.array(x_vals)
   y_vals = [ x[1] for x in mnist ]
@@ -206,6 +156,10 @@ def main(_):
     gs = sess.run(grads, feed_dict={x:xtest_data, y_:ytest_data, keep_prob: 1.0})
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
     print(gs, gs[0].shape)
+  
+  for tp in mdl.true_positives:
+      print(tp)
+      break
 
 
 if __name__ == '__main__':

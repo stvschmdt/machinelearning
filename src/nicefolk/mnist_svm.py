@@ -15,7 +15,7 @@ class Simple_SVM():
         self.clf.fit(self.training_data[0][:1000], self.training_data[1][:1000])
         # test
         self.predictions = [int(a) for a in self.clf.predict(self.test_data[0])]
-        self.true_positives = [ (self.test_data[0][idx],p) for idx,p in enumerate(zip(self.predictions, self.test_data[1])) if p[0]==p[1] ]
+        self.true_positives = [ (self.test_data[0][idx],p[0],p[1]) for idx,p in enumerate(zip(self.predictions, self.test_data[1])) if p[0]==p[1] ]
         num_correct = sum(int(a == y) for a, y in zip(self.predictions, self.test_data[1]))
         #print 'simple black box classifier using an SVM'
         print 'black box svm accuray: %f' % (float(num_correct)/float(len(self.test_data[1])))
@@ -23,6 +23,6 @@ class Simple_SVM():
 
 if __name__ == "__main__":
     bb = Simple_SVM()
-    #print bb.true_positives[:2]
+    #print bb.true_positives[:1]
 
     

@@ -19,7 +19,7 @@ FLAGS = None
 # ==============================================================================
 
 
-class Simple(object):
+class BlackBox(object):
 
   def __init__(self, FLAGS, filename='simple_nn.ckpt'):
       # Import data
@@ -72,5 +72,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', type=str,default='/tmp/tensorflow/mnist/input_data',help='Directory for storing input data')
     FLAGS, unparsed = parser.parse_known_args()
-    bb = Simple(FLAGS)
+    bb = BlackBox(FLAGS)
+    #print(bb.oracle[0], bb.true_positives[0])
     #print(float(len(bb.true_positives)/float(len(bb.oracle))))
