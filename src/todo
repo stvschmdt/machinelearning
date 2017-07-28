@@ -1,0 +1,28 @@
+work on generalizing the 2d CNN for arbitrary images
+set up queueing
+set up read infile
+refactor code for abstraction
+
+#############################
+# adversarial algorythm dev #
+#############################
+
+modulize simple_NN
+store, save, return
+[ (inputs, classified_labels), model, (positively_classified_inputs, labels) ]
+
+modulize simple_SVM
+[ (inputs, classified_labels), model, (positively_classified_inputs, labels) ]
+
+arbitrary 2d CNN
+-logger, reporting, saving
+-continue making into class structure
+-train
+-test until accuracy high enough
+for each simple_model:
+  for each in positively_classified_inputs:
+    for each epsilon in range(0,55):
+      perturb(x) until y wrong
+-report transferability
+
+
