@@ -13,8 +13,10 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 import numpy as np
 import tensorflow as tf
+from logger import Logging
 
 FLAGS = None
+logger = Logging()
 
 # ==============================================================================
 
@@ -62,8 +64,8 @@ class BlackBox(object):
       self.oracle = []
       for c in zip(self.mnist.test.images, self.preds, self.reals):
           self.oracle.append(c)
-      print('****************** simple model accuracy **************')
-      print('black box accuracy: ', sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels}))
+      logger.info('****************** simple model accuracy **************')
+      logger.results('black box accuracy: ' % (sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
       simple_saver_path = simple_saver.save(sess, 'simple.ckpt')
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
 
