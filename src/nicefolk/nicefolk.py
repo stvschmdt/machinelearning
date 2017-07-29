@@ -281,7 +281,7 @@ def main(_):
     adv_pic1 = adv_images[winners[1]].reshape((28,28))
     true_pic = mdl.pictrue
     false_pic = mdl.picfalse
-    labels = ['NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'NEURAL NET THOUGHT %s BUT WAS %s'% (mdl.picfalselabel[0], mdl.picfalselabel[1]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[0]], adv_real[winners[0]]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[1]], adv_real[winners[1]]) ]
+    labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL NEURAL NET THOUGHT OUR %s WAS %s - ADVERSARY WIN' % (adv_pred[winners[1]], adv_real[winners[0]]), 'ORIGINAL NEURAL NET THOUGHT OUR %s WAS %s - ADVERSARY WIN' % (adv_pred[winners[1]], adv_real[winners[0]]) ]
     graphics([true_pic, false_pic, adv_pic0, adv_pic1], labels)
 
     
