@@ -117,24 +117,25 @@ def welcome_message():
     logger.info('we create a convolutional neural net to model this black box, querying it for training examples')
     logger.info('then we perturb the inputs in our new fancy model until we find a decision boundary we can cross')
     logger.info('now we test to see if this perturbation is transferable to the original model...fingers crossed!')
+    logger.info('nvidia would also love you to use nvidia-smi as simple as watch nvidia-smi from another shell')
     logger.info('............tensorflow should be cranking away by now...enjoy and dont forget python nicefolk.py --help\n\n')
     
 
 def graphics(images, labels):
     plt.figure(1)
-    plt.subplot(411)
+    plt.subplot(211)
     plt.xlabel(labels[0], labelpad=10)
     plt.imshow(images[0])
     
-    plt.subplot(412)
+    plt.subplot(212)
     plt.imshow(images[1])
     plt.xlabel(labels[1], labelpad=10)
     
-    plt.subplot(413)
+    plt.subplot(223)
     plt.imshow(images[2])
     plt.xlabel(labels[2],labelpad=10)
 
-    plt.subplot(414)
+    plt.subplot(224)
     plt.imshow(images[3])
     plt.xlabel(labels[3], labelpad=10)
     plt.show()
