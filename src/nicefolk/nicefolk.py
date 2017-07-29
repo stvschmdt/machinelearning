@@ -105,20 +105,20 @@ def one_hot(x):
 def graphics(images, labels):
     plt.figure(1)
     plt.subplot(411)
-    plt.xlabel(labels[0])
+    plt.xlabel(labels[0], labelpad=20)
     plt.imshow(images[0])
     
     plt.subplot(412)
     plt.imshow(images[1])
-    plt.xlabel(labels[1])
+    plt.xlabel(labels[1], labelpad=20)
     
     plt.subplot(413)
     plt.imshow(images[2])
-    plt.xlabel(labels[2])
+    plt.xlabel(labels[2],labelpad=20)
 
     plt.subplot(414)
     plt.imshow(images[3])
-    plt.xlabel(labels[3])
+    plt.xlabel(labels[3], labelpad=20)
     plt.show()
 
 #goodfellow et al attack x'=x+epsilon*sgn(gradient)
@@ -201,7 +201,7 @@ def main(_):
     pred_ = tf.argmax(y_conv,1)
     pred_vals = pred_.eval(feed_dict={x:test_images, y_:test_labels, keep_prob:1.0})
     true_pred = [ (pxl, p) for pxl, p, r in zip(test_images, pred_vals, test_vals) if p==r ]
-    logger.info('true positive test exemplars: %s'.format(len(true_pred)))
+    logger.info('true positive test exemplars: %f' %(len(true_pred)))
     logger.results('adversary accuracy: %g' % (accuracy.eval(feed_dict={x: test_images, y_: test_labels, keep_prob: 1.0})))
     #setup the goodfellow attack iterations
     adv_list = []
@@ -243,9 +243,9 @@ def main(_):
     adv_epsilon = np.array(adv_epsilon)
 
     # test for transferability
-    adv_pred = mdl.sess.run(tf.argmax(adv_labels,1))
+    adv_real = mdl.sess.run(tf.argmax(adv_labels,1))
     adv_ = tf.argmax(mdl.y,1)
-    adv_real = mdl.sess.run(adv_, feed_dict={mdl.x: adv_images})
+    adv_pred = mdl.sess.run(adv_, feed_dict={mdl.x: adv_images})
     winners = []
     epsilon_tracker = collections.defaultdict(int)
     for idx, (a, l, r) in enumerate(zip(adv_pred, adv_labels, adv_real)):
@@ -255,7 +255,7 @@ def main(_):
             epsilon_tracker[adv_epsilon[idx]] += 1
     logger.info('****************** results **************')
     logger.results('black box adversarial attack transferability: %g' % (1 - sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
-    for d,v in epsilon_tracker.items():
+    for d,v in sorted(epsilon_tracker.items()):
         logger.results('epsilon %s %s' % (d,v))
     adv_pic0 = adv_images[winners[0]].reshape((28,28))
     adv_pic1 = adv_images[winners[1]].reshape((28,28))
