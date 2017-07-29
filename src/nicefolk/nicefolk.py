@@ -148,14 +148,14 @@ def main(_):
   # define loss function -> cross entropy for now with softmax
   cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
   # train step, 1e-4 is default, best to use -2/-3 depending on time
-  train_step = tf.train.AdamOptimizer(FLAGS.opt).minimize(cross_entropy)
+  train_step = tf.train.AdamOptimizer(FLAGS.optimize).minimize(cross_entropy)
   # define correct prediction vectore and accuracy comparison
   correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
  
   # split training and test data into nparrays
-  train_images, train_labels, test_images, test_labels =split_train_data(x_vals, y_vals, FLAG.split)
-  logger.info('training sets: %s test sets: %s ... %s %s'.format(len(train_images),len(test_images), train_images.shape, train_labels.shape))
+  train_images, train_labels, test_images, test_labels =split_train_data(x_vals, y_vals, FLAGS.split)
+  logger.info('training sets: %d test sets: %d' % (len(train_images),len(test_images)))
   cnn_saver = tf.train.Saver()
   logger.info('starting adversarvial model training')
   #begin training with session
@@ -182,22 +182,56 @@ def main(_):
     logger.info('true positive test exemplars: %s'.format(len(true_pred)))
     logger.results('adversary accuracy: %g' % (accuracy.eval(feed_dict={x: test_images, y_: test_labels, keep_prob: 1.0})))
     #setup the goodfellow attack iterations
-    for epsilon in np.linspace(0.05,.35,num=FLAGS.augments):
-        xprime = []
-        yprime = []
-        for idx,pos in enumerate(true_pred):
+    adv_list = []
+    for idx,pos in enumerate(true_pred):
+      for epsilon in np.linspace(0.025,.25,num=FLAGS.augments):
+          #xprime = []
+          #yprime = []
           xp = goodfellow_mod(np.array(pos[0]), jacobian[0][idx], epsilon)
           prime_label = one_hot(int(pos[1]))
-          xprime.append(xp)
-          yprime.append(prime_label)
+          #xprime.append(xp)
+          #yprime.append(prime_label)
+          xprime = np.array(xp)
+          xprime = xprime.reshape((1,784))
+          yprime = np.array(prime_label)
+          yprime = yprime.reshape((1, 10))
+          acc = accuracy.eval(feed_dict={x: xprime, y_: yprime, keep_prob: 1.0})
+          #corr = sess.run(mdl.y, feed_dict={x:xprime})
+          if acc < 0.5:
+              adv_list.append((xprime, np.argmax(yprime), np.argmax(test_vals[idx]), epsilon))
+              print('YES!!!',np.argmax(yprime), test_vals[idx], epsilon)
+              #logger.results('YES adversary accuracy: %g %f' % (acc, epsilon))
+              break
+          logger.results('NO adversary accuracy: %g %f' % (acc, epsilon))
         #can do this each iteration - or as a whole...at this point timing doesnt matter, but will
-        xprime = np.array(xprime)
-        yprime = np.array(yprime)
-        yprime = yprime.reshape((len(yprime), 10))
-        logger.results('adversary accuracy: %g %f' % (accuracy.eval(feed_dict={x: xprime, y_: yprime, keep_prob: 1.0}), epsilon))
 
     # save model to file
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
+    
+    # at this point adv_list is a tuple (x modifed image, y label, true label, epsilon found) 
+    adv_images = [ a[0] for a in adv_list ]
+    l = len(adv_list)
+    adv_images = np.array(adv_images)
+    import ipdb
+    #ipdb.set_trace()
+    adv_images = adv_images.reshape((l, 784))
+    adv_labels = [ a[1] for a in adv_list ]
+    adv_labels = [ one_hot(int(v)) for v in adv_labels ]
+    adv_labels = np.array(adv_labels)
+    adv_labels = adv_labels.reshape((l,10))
+    adv_epsilon = [ a[2] for a in adv_list ]
+    adv_epsilon = np.array(adv_epsilon)
+    # test for transferability
+    #mdl.correct_prediction = tf.equal(tf.argmax(mdl.y, 1), tf.argmax(mdl.y_, 1))
+    #mdl.accuracy = tf.reduce_mean(tf.cast(mdl.correct_prediction, tf.float32))
+    #transfer = mdl.correct_prediction.eval(feed_dict={mdl.x: adv_images, mdl.y_: adv_labels})
+    adv_pred = sess.run(tf.argmax(adv_labels,1))
+    adv_ = tf.argmax(true_pred,1)
+    adv_real = sess.run(adv_, feed_dict={mdl.x: adv_images})
+    for a in zip(adv_images, adv_preds, true_pred):
+        print(a)
+    logger.info('****************** simple model accuracy **************')
+    logger.results('black box adversarial attack transferability: ' % (sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
 
 
 if __name__ == '__main__':
@@ -206,11 +240,12 @@ if __name__ == '__main__':
   parser.add_argument('--data_dir', type=str,default='/tmp/tensorflow/mnist/input_data',help='directory for storing input data')
   parser.add_argument('--batch_size', type=int,default=100,help='batch size for stochastic gradient descent')
   parser.add_argument('--optimize', type=float,default=1e-3,help='threshold for adam optimizer')
-  parser.add_argument('--iters', type=int,default=500,help='cnn training epochs')
+  parser.add_argument('--iters', type=int,default=20,help='cnn training epochs')
   parser.add_argument('--augments', type=int,default=10,help='number of attack augmentations to sample for epsilon on inputs')
   parser.add_argument('--split', type=float,default=200,help='train test set percent split')
   parser.add_argument('--fsplit', type=float,default=None,help='train test set percent split')
   FLAGS, unparsed = parser.parse_known_args()
+  #logger.info('FLAGS set: %g'%(FLAGS))
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
 
 
