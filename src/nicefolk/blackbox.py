@@ -1,6 +1,6 @@
 # ==============================================================================
 
-"""a simple DNN classifier model class.
+"""a simple DNN classifier model class to serve as a blackbox
 """
 from __future__ import absolute_import
 from __future__ import division
@@ -59,20 +59,26 @@ class BlackBox(object):
       # Test trained model
       self.correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))
       self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
+      # reals are a tensor of actual values from the y labels in test set
       self.reals = self.sess.run(tf.argmax(self.mnist.test.labels,1))
+      # define function for calculating the feed forard of x images -> store these in preds
       self.preds = tf.argmax(self.y,1)
       self.preds = self.sess.run(self.preds, feed_dict={self.x: self.mnist.test.images})
       self.oracle = []
+      # c = [ 784 image, pred value, real value ]
       for c in zip(self.mnist.test.images, self.preds, self.reals):
           self.oracle.append(c)
       logger.results('black box accuracy: %g' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
       simple_saver_path = simple_saver.save(self.sess, 'simple.ckpt')
+      # its 3am and my variable names suck, sue me if true_pos and false_pos arent actually what they are in  ml land
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
-      self.pictruelabel = (self.true_positives[0][1], self.true_positives[0][2])
-      self.pictrue = self.true_positives[0][0].reshape((28,28))
       self.true_negatives = [ ex for ex in self.oracle if ex[1] != ex[2] ]
-      self.picfalselabel = (self.true_negatives[0][1], self.true_negatives[0][2])
-      self.picfalse = self.true_negatives[0][0].reshape((28,28))
+      self.psample = np.random.choice(self.true_positives)
+      self.nsample = np.random.choice(self.false_positives)
+      self.pictruelabel = (self.psample[1], self.psample[2])
+      self.pictrue = self.psample[0].reshape((28,28))
+      self.picfalselabel = (self.nsample[1], self.nsample[2])
+      self.picfalse = self.nsample[0].reshape((28,28))
 
 
 if __name__ == '__main__':
