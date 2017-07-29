@@ -123,11 +123,11 @@ def welcome_message():
 
 def graphics(images, labels):
     plt.figure(1)
-    plt.subplot(211)
+    plt.subplot(221)
     plt.xlabel(labels[0], labelpad=10)
     plt.imshow(images[0])
     
-    plt.subplot(212)
+    plt.subplot(222)
     plt.imshow(images[1])
     plt.xlabel(labels[1], labelpad=10)
     
@@ -242,7 +242,7 @@ def main(_):
               #logger.results('YES adversary accuracy: %g %f' % (acc, epsilon))
               break
         #can do this each iteration - or as a whole...at this point timing doesnt matter, but will
-    logger.results('true positive adversary count: %f' % (float(len(adv_list))/float(len(adv_list))))
+    logger.results('true positive adversary count: %f' % (float(len(adv_list))/float(len(true_pred))))
 
     # save model to file
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
