@@ -104,7 +104,7 @@ def one_hot(x):
 
 
 def welcome_message():
-    logger.info('****************** welcome to the black box attack of artificial intelligence machines *******************')
+    logger.info('\n\n****************** welcome to the black box attack of artificial intelligence machines *******************')
     logger.info('this is a combination implementation of papers by ian goodfellow et al')
     logger.info('the first item accomplished is training a simple (bad) or (good) classifier')
     logger.info('this classifer achieves well over 90% accuracy, and misclassifies things humans may')
@@ -117,7 +117,7 @@ def welcome_message():
     logger.info('we create a convolutional neural net to model this black box, querying it for training examples')
     logger.info('then we perturb the inputs in our new fancy model until we find a decision boundary we can cross')
     logger.info('now we test to see if this perturbation is transferable to the original model...fingers crossed!')
-    logger.info('............tensorflow should be cranking away by now...enjoy and dont forget python nicefolk.py --help')
+    logger.info('............tensorflow should be cranking away by now...enjoy and dont forget python nicefolk.py --help\n\n')
     
 
 def graphics(images, labels):
