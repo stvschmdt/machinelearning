@@ -66,7 +66,7 @@ class BlackBox(object):
       for c in zip(self.mnist.test.images, self.preds, self.reals):
           self.oracle.append(c)
       logger.info('****************** simple model accuracy **************')
-      logger.results('black box accuracy: ' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
+      logger.results('black box accuracy: %g' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
       simple_saver_path = simple_saver.save(self.sess, 'simple.ckpt')
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
       self.pictruelabel = (self.true_positives[0][1], self.true_positives[0][2])
