@@ -162,9 +162,9 @@ def split_train_data(xarr, yarr, n):
   return train_images, train_labels, test_images, test_labels
 
 def main(_):
+  welcome_message()
   # import data
   mdl = BlackBox(FLAGS)
-  welcome_message()
   # NOTE this will work with format: mdl.oracle = (image, pred_val, true_val)
   logger.info('obtained black box training data')
   mnist = mdl.oracle
