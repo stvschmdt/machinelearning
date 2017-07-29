@@ -8,6 +8,7 @@ from __future__ import print_function
 
 import argparse
 import sys
+import matplotlib.pyplot as plt
 
 from tensorflow.examples.tutorials.mnist import input_data
 
@@ -47,27 +48,34 @@ class BlackBox(object):
       cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.y))
       train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
       simple_saver = tf.train.Saver()
-      sess = tf.InteractiveSession()
+      self.sess = tf.InteractiveSession()
       tf.global_variables_initializer().run()
       # Train
       for _ in range(1000):
         self.batch_xs, self.batch_ys = self.mnist.train.next_batch(100)
-        sess.run(train_step, feed_dict={self.x: self.batch_xs, self.y_: self.batch_ys})
+        self.sess.run(train_step, feed_dict={self.x: self.batch_xs, self.y_: self.batch_ys})
 
       # Test trained model
       self.correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))
       self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
       self.cp = self.correct_prediction.eval(feed_dict={self.x: self.mnist.test.images, self.y_: self.mnist.test.labels})
-      self.preds = sess.run(tf.argmax(self.mnist.test.labels,1))
+      self.preds = self.sess.run(tf.argmax(self.mnist.test.labels,1))
       self.reals = tf.argmax(self.y,1)
-      self.reals = sess.run(self.reals, feed_dict={self.x: self.mnist.test.images})
+      self.reals = self.sess.run(self.reals, feed_dict={self.x: self.mnist.test.images})
       self.oracle = []
       for c in zip(self.mnist.test.images, self.preds, self.reals):
           self.oracle.append(c)
       logger.info('****************** simple model accuracy **************')
-      logger.results('black box accuracy: ' % (sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
-      simple_saver_path = simple_saver.save(sess, 'simple.ckpt')
+      logger.results('black box accuracy: ' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
+      simple_saver_path = simple_saver.save(self.sess, 'simple.ckpt')
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
+      print(self.true_positives[0][1], self.true_positives[0][2])
+      plt.imshow(self.true_positives[0][0].reshape((28,28)))
+      plt.show()
+      self.true_negatives = [ ex for ex in self.oracle if ex[1] != ex[2] ]
+      print(self.true_negatives[0][1], self.true_negatives[0][2])
+      plt.imshow(self.true_negatives[0][0].reshape((28,28)))
+      plt.show()
 
 
 if __name__ == '__main__':
