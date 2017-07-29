@@ -69,13 +69,11 @@ class BlackBox(object):
       logger.results('black box accuracy: ' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
       simple_saver_path = simple_saver.save(self.sess, 'simple.ckpt')
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
-      print(self.true_positives[0][1], self.true_positives[0][2])
-      plt.imshow(self.true_positives[0][0].reshape((28,28)))
-      plt.show()
+      self.pictruelabel = (self.true_positives[0][1], self.true_positives[0][2])
+      self.pictrue = self.true_positives[0][0].reshape((28,28))
       self.true_negatives = [ ex for ex in self.oracle if ex[1] != ex[2] ]
-      print(self.true_negatives[0][1], self.true_negatives[0][2])
-      plt.imshow(self.true_negatives[0][0].reshape((28,28)))
-      plt.show()
+      self.picfalselabel = (self.true_negatives[0][1], self.true_negatives[0][2])
+      self.picfalse = self.true_negatives[0][0].reshape((28,28))
 
 
 if __name__ == '__main__':

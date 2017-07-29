@@ -1,24 +1,27 @@
 # ==============================================================================
 
-"""an adversarial attack against a black box machine learning or artificial
+"""author: steve schmidt
+   an adversarial attack against a black box machine learning or artificial
    intelligence entity. train test against an oracle -> pertrurb input vector
    attain transferability to misclassification in original oracle model
 """
+# ==============================================================================
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
 import argparse
 import sys
+import collections
 
 import numpy as np
 import tensorflow as tf
+import matplotlib.pyplot as plt
 from blackbox import BlackBox
 from logger import Logging
 
 FLAGS = None
 logger = Logging()
-# ==============================================================================
 
 
 def deepnn(x):
@@ -98,6 +101,22 @@ def one_hot(x):
     y = np.zeros((10,1))
     y[x] = 1.0
     return y
+
+def graphics(images, labels):
+    plt.figure(1)
+    plt.subplot(311)
+    plt.xlabel(labels[0])
+    plt.imshow(images[0])
+    
+    plt.subplot(312)
+    plt.imshow(images[1])
+    plt.xlabel(labels[1])
+    
+    plt.subplot(313)
+    plt.imshow(images[2])
+    plt.xlabel(labels[2])
+
+    plt.show()
 
 #goodfellow et al attack x'=x+epsilon*sgn(gradient)
 def goodfellow_mod(x, grad, epsilon=0.05):
@@ -185,25 +204,22 @@ def main(_):
     adv_list = []
     for idx,pos in enumerate(true_pred):
       for epsilon in np.linspace(0.025,.25,num=FLAGS.augments):
-          #xprime = []
-          #yprime = []
           xp = goodfellow_mod(np.array(pos[0]), jacobian[0][idx], epsilon)
           prime_label = one_hot(int(pos[1]))
-          #xprime.append(xp)
-          #yprime.append(prime_label)
-          xprime = np.array(xp)
-          xprime = xprime.reshape((1,784))
-          yprime = np.array(prime_label)
-          yprime = yprime.reshape((1, 10))
+          xprime = np.array(xp).reshape((1,784))
+          #xprime = xprime.reshape((1,784))
+          yprime = np.array(prime_label).reshape((1,10))
+          #yprime = yprime.reshape((1, 10))
+          pred_vals = pred_.eval(feed_dict={x: xprime, y_: yprime, keep_prob:1.0})
           acc = accuracy.eval(feed_dict={x: xprime, y_: yprime, keep_prob: 1.0})
           #corr = sess.run(mdl.y, feed_dict={x:xprime})
-          if acc < 0.5:
-              adv_list.append((xprime, np.argmax(yprime), np.argmax(test_vals[idx]), epsilon))
-              print('YES!!!',np.argmax(yprime), test_vals[idx], epsilon)
+          if acc < 1.0:
+              adv_list.append((xprime, np.argmax(yprime), pred_vals, epsilon))
+              #print('YES!!!',pred_vals, np.argmax(yprime), pos[1], epsilon)
               #logger.results('YES adversary accuracy: %g %f' % (acc, epsilon))
               break
-          logger.results('NO adversary accuracy: %g %f' % (acc, epsilon))
         #can do this each iteration - or as a whole...at this point timing doesnt matter, but will
+    logger.results('true positive adversary count: %f' % (float(len(adv_list))/float(len(adv_list))))
 
     # save model to file
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
@@ -211,28 +227,40 @@ def main(_):
     # at this point adv_list is a tuple (x modifed image, y label, true label, epsilon found) 
     adv_images = [ a[0] for a in adv_list ]
     l = len(adv_list)
-    adv_images = np.array(adv_images)
-    import ipdb
-    #ipdb.set_trace()
-    adv_images = adv_images.reshape((l, 784))
+    adv_images = np.array(adv_images).reshape((l,784))
+    #adv_images = adv_images.reshape((l, 784))
     adv_labels = [ a[1] for a in adv_list ]
     adv_labels = [ one_hot(int(v)) for v in adv_labels ]
-    adv_labels = np.array(adv_labels)
-    adv_labels = adv_labels.reshape((l,10))
-    adv_epsilon = [ a[2] for a in adv_list ]
-    adv_epsilon = np.array(adv_epsilon)
-    # test for transferability
-    #mdl.correct_prediction = tf.equal(tf.argmax(mdl.y, 1), tf.argmax(mdl.y_, 1))
-    #mdl.accuracy = tf.reduce_mean(tf.cast(mdl.correct_prediction, tf.float32))
-    #transfer = mdl.correct_prediction.eval(feed_dict={mdl.x: adv_images, mdl.y_: adv_labels})
-    adv_pred = sess.run(tf.argmax(adv_labels,1))
-    adv_ = tf.argmax(true_pred,1)
-    adv_real = sess.run(adv_, feed_dict={mdl.x: adv_images})
-    for a in zip(adv_images, adv_preds, true_pred):
-        print(a)
-    logger.info('****************** simple model accuracy **************')
-    logger.results('black box adversarial attack transferability: ' % (sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
+    adv_labels = np.array(adv_labels).reshape((l,10))
 
+    adv_real = [ a[2] for a in adv_list ]
+    adv_real = np.array(adv_real)
+    #adv_labels = adv_labels.reshape((l,10))
+    adv_epsilon = [ a[3] for a in adv_list ]
+    adv_epsilon = np.array(adv_epsilon)
+
+    # test for transferability
+    adv_pred = mdl.sess.run(tf.argmax(adv_labels,1))
+    adv_ = tf.argmax(mdl.y,1)
+    adv_real = mdl.sess.run(adv_, feed_dict={mdl.x: adv_images})
+    winners = []
+    epsilon_tracker = collections.defaultdict(int)
+    for idx, (a, l, r) in enumerate(zip(adv_pred, adv_labels, adv_real)):
+        #print( a, l, r, a == r)
+        if a != r:
+            winners.append(idx)
+            epsilon_tracker[adv_epsilon[idx]] += 1
+    logger.info('****************** results **************')
+    logger.results('black box adversarial attack transferability: %g' % (1 - sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
+    for d,v in epsilon_tracker.items():
+        logger.results('epsilon %s %s' % (d,v))
+    adv_pic = adv_images[winners[0]].reshape((28,28))
+    true_pic = mdl.pictrue
+    false_pic = mdl.picfalse
+    labels = ['NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'NEURAL NET THOUGHT %s BUT WAS %s'% (mdl.picfalselabel[0], mdl.picfalselabel[1]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[0]], adv_real[winners[0]]) ]
+    graphics([true_pic, false_pic, adv_pic], labels)
+
+    
 
 if __name__ == '__main__':
 # args: batch_size, graddescent number, training iters, epsilon trial space
