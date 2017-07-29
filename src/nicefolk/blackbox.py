@@ -51,6 +51,7 @@ class BlackBox(object):
       self.sess = tf.InteractiveSession()
       tf.global_variables_initializer().run()
       # Train
+      logger.info('simple nn model accuracy training...')
       for _ in range(1000):
         self.batch_xs, self.batch_ys = self.mnist.train.next_batch(100)
         self.sess.run(train_step, feed_dict={self.x: self.batch_xs, self.y_: self.batch_ys})
@@ -58,14 +59,12 @@ class BlackBox(object):
       # Test trained model
       self.correct_prediction = tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_, 1))
       self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, tf.float32))
-      self.cp = self.correct_prediction.eval(feed_dict={self.x: self.mnist.test.images, self.y_: self.mnist.test.labels})
-      self.preds = self.sess.run(tf.argmax(self.mnist.test.labels,1))
-      self.reals = tf.argmax(self.y,1)
-      self.reals = self.sess.run(self.reals, feed_dict={self.x: self.mnist.test.images})
+      self.reals = self.sess.run(tf.argmax(self.mnist.test.labels,1))
+      self.preds = tf.argmax(self.y,1)
+      self.preds = self.sess.run(self.preds, feed_dict={self.x: self.mnist.test.images})
       self.oracle = []
       for c in zip(self.mnist.test.images, self.preds, self.reals):
           self.oracle.append(c)
-      logger.info('****************** simple model accuracy **************')
       logger.results('black box accuracy: %g' % (self.sess.run(self.accuracy, feed_dict={self.x: self.mnist.test.images,self.y_: self.mnist.test.labels})))
       simple_saver_path = simple_saver.save(self.sess, 'simple.ckpt')
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
