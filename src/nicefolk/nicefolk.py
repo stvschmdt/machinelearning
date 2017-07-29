@@ -102,23 +102,41 @@ def one_hot(x):
     y[x] = 1.0
     return y
 
+
+def welcome_message():
+    logger.info('****************** welcome to the black box attack of artificial intelligence machines *******************')
+    logger.info('this is a combination implementation of papers by ian goodfellow et al')
+    logger.info('the first item accomplished is training a simple (bad) or (good) classifier')
+    logger.info('this classifer achieves well over 90% accuracy, and misclassifies things humans may')
+    logger.info('our goal is to treat this like an oracle...much like one might treat real world q&a')
+    logger.info('for example - ')
+    logger.info('windows defender: is it malware or not? we do not have their source code, but could query')
+    logger.info('image recognition: can we model a website/app classifier, and make it accept unwanted items?')
+    logger.info('self driving entities: obvious attack, pixel modification into sensors could be achieved')
+    logger.info('how do we do this? high level overview coming...')
+    logger.info('we create a convolutional neural net to model this black box, querying it for training examples')
+    logger.info('then we perturb the inputs in our new fancy model until we find a decision boundary we can cross')
+    logger.info('now we test to see if this perturbation is transferable to the original model...fingers crossed!')
+    logger.info('............tensorflow should be cranking away by now...enjoy and dont forget python nicefolk.py --help')
+    
+
 def graphics(images, labels):
     plt.figure(1)
     plt.subplot(411)
-    plt.xlabel(labels[0], labelpad=20)
+    plt.xlabel(labels[0], labelpad=10)
     plt.imshow(images[0])
     
     plt.subplot(412)
     plt.imshow(images[1])
-    plt.xlabel(labels[1], labelpad=20)
+    plt.xlabel(labels[1], labelpad=10)
     
     plt.subplot(413)
     plt.imshow(images[2])
-    plt.xlabel(labels[2],labelpad=20)
+    plt.xlabel(labels[2],labelpad=10)
 
     plt.subplot(414)
     plt.imshow(images[3])
-    plt.xlabel(labels[3], labelpad=20)
+    plt.xlabel(labels[3], labelpad=10)
     plt.show()
 
 #goodfellow et al attack x'=x+epsilon*sgn(gradient)
@@ -146,6 +164,7 @@ def split_train_data(xarr, yarr, n):
 def main(_):
   # import data
   mdl = BlackBox(FLAGS)
+  welcome_message()
   # NOTE this will work with format: mdl.oracle = (image, pred_val, true_val)
   logger.info('obtained black box training data')
   mnist = mdl.oracle
