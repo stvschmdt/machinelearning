@@ -104,18 +104,21 @@ def one_hot(x):
 
 def graphics(images, labels):
     plt.figure(1)
-    plt.subplot(311)
+    plt.subplot(411)
     plt.xlabel(labels[0])
     plt.imshow(images[0])
     
-    plt.subplot(312)
+    plt.subplot(412)
     plt.imshow(images[1])
     plt.xlabel(labels[1])
     
-    plt.subplot(313)
+    plt.subplot(413)
     plt.imshow(images[2])
     plt.xlabel(labels[2])
 
+    plt.subplot(414)
+    plt.imshow(images[3])
+    plt.xlabel(labels[3])
     plt.show()
 
 #goodfellow et al attack x'=x+epsilon*sgn(gradient)
@@ -254,11 +257,12 @@ def main(_):
     logger.results('black box adversarial attack transferability: %g' % (1 - sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
     for d,v in epsilon_tracker.items():
         logger.results('epsilon %s %s' % (d,v))
-    adv_pic = adv_images[winners[0]].reshape((28,28))
+    adv_pic0 = adv_images[winners[0]].reshape((28,28))
+    adv_pic1 = adv_images[winners[1]].reshape((28,28))
     true_pic = mdl.pictrue
     false_pic = mdl.picfalse
-    labels = ['NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'NEURAL NET THOUGHT %s BUT WAS %s'% (mdl.picfalselabel[0], mdl.picfalselabel[1]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[0]], adv_real[winners[0]]) ]
-    graphics([true_pic, false_pic, adv_pic], labels)
+    labels = ['NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'NEURAL NET THOUGHT %s BUT WAS %s'% (mdl.picfalselabel[0], mdl.picfalselabel[1]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[0]], adv_real[winners[0]]), 'ORIGINAL NEURAL NET THOUGHT %s BUT REALLY IS %s' % (adv_pred[winners[1]], adv_real[winners[1]]) ]
+    graphics([true_pic, false_pic, adv_pic0, adv_pic1], labels)
 
     
 
