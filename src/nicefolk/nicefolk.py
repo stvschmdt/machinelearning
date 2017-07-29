@@ -19,6 +19,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from blackbox import BlackBox
 from logger import Logging
+import random
 
 FLAGS = None
 logger = Logging()
@@ -123,21 +124,30 @@ def welcome_message():
 
 def graphics(images, labels):
     plt.figure(1)
-    plt.subplot(221)
-    plt.xlabel(labels[0], labelpad=10)
+    plt.subplot(321)
+    plt.xlabel(labels[0], labelpad=2)
     plt.imshow(images[0])
     
-    plt.subplot(222)
+    plt.subplot(322)
     plt.imshow(images[1])
-    plt.xlabel(labels[1], labelpad=10)
+    plt.xlabel(labels[1], labelpad=2)
     
-    plt.subplot(223)
+    plt.subplot(323)
     plt.imshow(images[2])
-    plt.xlabel(labels[2],labelpad=10)
+    plt.xlabel(labels[2],labelpad=2)
 
-    plt.subplot(224)
+    plt.subplot(324)
     plt.imshow(images[3])
-    plt.xlabel(labels[3], labelpad=10)
+    plt.xlabel(labels[3], labelpad=2)
+    
+    plt.subplot(325)
+    plt.imshow(images[4])
+    plt.xlabel(labels[4], labelpad=2)
+    
+    plt.subplot(326)
+    plt.imshow(images[5])
+    plt.xlabel(labels[5], labelpad=2)
+
     plt.show()
 
 #goodfellow et al attack x'=x+epsilon*sgn(gradient)
@@ -216,11 +226,17 @@ def main(_):
     grads = tf.gradients(cross_entropy, [x])
     jacobian = sess.run(grads, feed_dict={x:test_images, y_:test_labels, keep_prob: 1.0})
     #use test data as input for perturbations
-    test_ = tf.argmax(y_,1)
-    test_vals = test_.eval(feed_dict={y_:test_labels})
+    #test_ = tf.argmax(y_,1)
+    #test_vals = test_.eval(feed_dict={y_:test_labels})
+    # use this...
+    verify = sess.run(tf.argmax(test_labels, 1))
+    #for ver in zip(verify, test_vals):
+        #print(ver, test_vals)
     pred_ = tf.argmax(y_conv,1)
+    #vify = tf.argmax(y_,1)
     pred_vals = pred_.eval(feed_dict={x:test_images, y_:test_labels, keep_prob:1.0})
-    true_pred = [ (pxl, p) for pxl, p, r in zip(test_images, pred_vals, test_vals) if p==r ]
+    #vify_vals = vify.eval(feed_dict={x:test_images, y_:test_labels, keep_prob:1.0})
+    true_pred = [ (pxl, p) for pxl, p, r in zip(test_images, pred_vals, verify) if p==r ]
     logger.info('true positive test exemplars: %f' %(len(true_pred)))
     logger.results('adversary accuracy: %g' % (accuracy.eval(feed_dict={x: test_images, y_: test_labels, keep_prob: 1.0})))
     #setup the goodfellow attack iterations
@@ -237,8 +253,17 @@ def main(_):
           acc = accuracy.eval(feed_dict={x: xprime, y_: yprime, keep_prob: 1.0})
           #corr = sess.run(mdl.y, feed_dict={x:xprime})
           if acc < 1.0:
-              adv_list.append((xprime, np.argmax(yprime), pred_vals, epsilon))
-              #print('YES!!!',pred_vals, np.argmax(yprime), pos[1], epsilon)
+              #plt.figure(1)
+              #plt.subplot(121)
+              #img = pos[0].reshape((28,28))
+              #plt.imshow(img)
+             
+              #plt.subplot(122)
+              #img1 = xp.reshape((28,28))
+              #plt.imshow(img1)
+              #print(pos[1], np.argmax(yprime), pred_vals, epsilon, np.sum(xp), np.sum(pos[0]), np.sum(xprime))
+              #plt.show()
+              adv_list.append((xprime, np.argmax(yprime), pred_vals, epsilon, pos[0]))
               #logger.results('YES adversary accuracy: %g %f' % (acc, epsilon))
               break
         #can do this each iteration - or as a whole...at this point timing doesnt matter, but will
@@ -262,6 +287,8 @@ def main(_):
     adv_epsilon = [ a[3] for a in adv_list ]
     adv_epsilon = np.array(adv_epsilon)
 
+    adv_real_image = [ a[4] for a in adv_list ]
+
     # test for transferability
     adv_real = mdl.sess.run(tf.argmax(adv_labels,1))
     adv_ = tf.argmax(mdl.y,1)
@@ -271,18 +298,23 @@ def main(_):
     for idx, (a, l, r) in enumerate(zip(adv_pred, adv_labels, adv_real)):
         #print( a, l, r, a == r)
         if a != r:
+            #logger.info('found adversarial example: %g %g' % (a, r))
             winners.append(idx)
             epsilon_tracker[adv_epsilon[idx]] += 1
     logger.info('****************** results **************')
     logger.results('black box adversarial attack transferability: %g' % (1 - sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
     for d,v in sorted(epsilon_tracker.items()):
         logger.results('epsilon %s %s' % (d,v))
+    # grab first two success stories and show them -> lets assume two or error handle later
     adv_pic0 = adv_images[winners[0]].reshape((28,28))
-    adv_pic1 = adv_images[winners[1]].reshape((28,28))
+    adv_pic0_real = adv_real_image[winners[0]].reshape((28,28))
+    rando = random.randint(1,(len(winners)-1))
+    adv_pic1 = adv_images[winners[rando]].reshape((28,28))
+    adv_pic1_real = adv_real_image[winners[rando]].reshape((28,28))
     true_pic = mdl.pictrue
     false_pic = mdl.picfalse
-    labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s ' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL NEURAL NET THOUGHT OUR %s WAS %s - ADVERSARY WIN' % (adv_pred[winners[1]], adv_real[winners[0]]), 'ORIGINAL NEURAL NET THOUGHT OUR %s WAS %s - ADVERSARY WIN' % (adv_pred[winners[1]], adv_real[winners[0]]) ]
-    graphics([true_pic, false_pic, adv_pic0, adv_pic1], labels)
+    labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL IMAGE %s' % (adv_real[winners[0]]), 'ORIGINAL NET THOUGHT %s'%(adv_pred[winners[0]]),'ORIGINAL IMAGE %s' % (adv_real[rando]), 'ORIGINAL NET THOUGHT %s' % (adv_pred[rando]) ]
+    graphics([true_pic, false_pic, adv_pic0_real, adv_pic0, adv_pic1_real, adv_pic1], labels)
 
     
 

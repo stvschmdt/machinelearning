@@ -9,6 +9,7 @@ from __future__ import print_function
 import argparse
 import sys
 import matplotlib.pyplot as plt
+import random
 
 from tensorflow.examples.tutorials.mnist import input_data
 
@@ -18,9 +19,15 @@ from logger import Logging
 
 FLAGS = None
 logger = Logging()
+GRAPH = 1
 
 # ==============================================================================
-
+def graphics(images):
+	for i in images:
+		i.reshape((28,28))
+      		plt.imshow(i)
+      		plt.show()
+    	return
 
 class BlackBox(object):
 
@@ -73,13 +80,32 @@ class BlackBox(object):
       # its 3am and my variable names suck, sue me if true_pos and false_pos arent actually what they are in  ml land
       self.true_positives = [ ex for ex in self.oracle if ex[1] == ex[2] ]
       self.true_negatives = [ ex for ex in self.oracle if ex[1] != ex[2] ]
-      self.psample = np.random.choice(self.true_positives)
-      self.nsample = np.random.choice(self.false_positives)
+      self.psample = random.choice(self.true_positives)
+      self.nsample = random.choice(self.true_negatives)
       self.pictruelabel = (self.psample[1], self.psample[2])
       self.pictrue = self.psample[0].reshape((28,28))
       self.picfalselabel = (self.nsample[1], self.nsample[2])
       self.picfalse = self.nsample[0].reshape((28,28))
-
+      #if GRAPH:
+        #count = 0
+	#for g in self.true_positives:
+	  #f = g[0].reshape((28,28))
+          #print(g[1:])
+          #plt.imshow(f)
+	  #plt.show()
+	  #count +=1
+	  #if count > 5:
+		#break
+        #count = 0
+	#for g in self.true_negatives[-5:]:
+	  #f = g[0].reshape((28,28))
+          #print(g[1:])
+          #plt.imshow(f)
+	  #plt.show()
+	  ##count +=1
+          #if count > 5:
+		#break
+		
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
