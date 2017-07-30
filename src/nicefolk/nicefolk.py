@@ -313,7 +313,7 @@ def main(_):
     adv_pic1_real = adv_real_image[winners[rando]].reshape((28,28))
     true_pic = mdl.pictrue
     false_pic = mdl.picfalse
-    labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL IMAGE %s' % (adv_real[winners[0]]), 'ORIGINAL NET THOUGHT %s'%(adv_pred[winners[0]]),'ORIGINAL IMAGE %s' % (adv_real[rando]), 'ORIGINAL NET THOUGHT %s' % (adv_pred[rando]) ]
+    labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL IMAGE %s' % (adv_real[winners[0]]), 'ORIGINAL NET THOUGHT %s'%(adv_pred[winners[0]]),'ORIGINAL IMAGE %s' % (adv_real[winners[rando]]), 'ORIGINAL NET THOUGHT %s' % (adv_pred[winners[rando]]) ]
     graphics([true_pic, false_pic, adv_pic0_real, adv_pic0, adv_pic1_real, adv_pic1], labels)
 
     
