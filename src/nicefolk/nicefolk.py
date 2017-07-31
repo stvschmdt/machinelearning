@@ -179,15 +179,19 @@ def main(_):
   # NOTE this will work with format: mdl.oracle = (image, pred_val, true_val)
   logger.info('obtained black box training data')
   mnist = mdl.oracle
-  # translate into tensorflow style nparrays
-  x_vals = image_list_to_np(mnist, 0)
-  true_vals = image_list_to_np(mnist,2)
-  
-  # yvals converted to one hot vector
-  y_vals = [ x[1] for x in mnist ]
-  y_vals = [ one_hot(i) for i in y_vals]
-  y_vals = np.array(y_vals)
-  y_vals = y_vals.reshape((len(y_vals),10))
+  with tf.device('/cpu:0'):
+      # translate into tensorflow style nparrays
+      x_vals = image_list_to_np(mnist, 0)
+      true_vals = image_list_to_np(mnist,2)
+      
+      # yvals converted to one hot vector
+      y_vals = [ x[1] for x in mnist ]
+      y_vals = [ one_hot(i) for i in y_vals]
+      y_vals = np.array(y_vals)
+      y_vals = y_vals.reshape((len(y_vals),10))
+      
+      # split training and test data into nparrays
+      train_images, train_labels, test_images, test_labels =split_train_data(x_vals, y_vals, FLAGS.split)
  
   # Tensorflow variable setup
 
@@ -205,8 +209,6 @@ def main(_):
   correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
   accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
  
-  # split training and test data into nparrays
-  train_images, train_labels, test_images, test_labels =split_train_data(x_vals, y_vals, FLAGS.split)
   logger.info('training sets: %d test sets: %d' % (len(train_images),len(test_images)))
   cnn_saver = tf.train.Saver()
   logger.info('starting adversarvial model training')
