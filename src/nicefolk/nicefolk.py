@@ -13,6 +13,7 @@ from __future__ import print_function
 import argparse
 import sys
 import collections
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -173,12 +174,19 @@ def split_train_data(xarr, yarr, n):
   return train_images, train_labels, test_images, test_labels
 
 def main(_):
-  welcome_message()
-  # import data
-  mdl = BlackBox(FLAGS)
-  # NOTE this will work with format: mdl.oracle = (image, pred_val, true_val)
+  start_t = time.time()
+  try:
+      welcome_message()
+      # import data
+      mdl = BlackBox(FLAGS)
+      # NOTE this will work with format: mdl.oracle = (image, pred_val, true_val)
+  except:
+      logger.error('black blox training failed...........shutting down!')
+      return
   logger.info('obtained black box training data')
+  logger.info('oracle data capture time: %f' %(time.time()-start_t))
   mnist = mdl.oracle
+  prep_t = time.time()
   with tf.device('/cpu:0'):
       # translate into tensorflow style nparrays
       x_vals = image_list_to_np(mnist, 0)
@@ -211,6 +219,8 @@ def main(_):
  
   logger.info('training sets: %d test sets: %d' % (len(train_images),len(test_images)))
   cnn_saver = tf.train.Saver()
+  logger.info('cpu preprocessing time: %f' %(time.time()-prep_t))
+  train_t = time.time()
   logger.info('starting adversarvial model training')
   #begin training with session
   with tf.Session() as sess:
@@ -242,6 +252,8 @@ def main(_):
     logger.info('true positive test exemplars: %f' %(len(true_pred)))
     logger.results('adversary accuracy: %g' % (accuracy.eval(feed_dict={x: test_images, y_: test_labels, keep_prob: 1.0})))
     #setup the goodfellow attack iterations
+    logger.info('attack model train time: %f' %(time.time()-train_t))
+    pert_t = time.time()
     adv_list = []
     for idx,pos in enumerate(true_pred):
       for epsilon in np.linspace(0.025,.25,num=FLAGS.augments):
@@ -271,6 +283,8 @@ def main(_):
         #can do this each iteration - or as a whole...at this point timing doesnt matter, but will
     logger.results('true positive adversary count: %f' % (float(len(adv_list))/float(len(true_pred))))
 
+    logger.info('distortion vector time: %f' %(time.time()-pert_t))
+    att_t = time.time()
     # save model to file
     cnn_saver_path = cnn_saver.save(sess, 'cnn_saver.ckpt')
     
@@ -303,6 +317,7 @@ def main(_):
             #logger.info('found adversarial example: %g %g' % (a, r))
             winners.append(idx)
             epsilon_tracker[adv_epsilon[idx]] += 1
+    logger.info('attack results time: %f' %(time.time()-att_t))
     logger.info('****************** results **************')
     logger.results('black box adversarial attack transferability: %g' % (1 - sess.run(mdl.accuracy, feed_dict={mdl.x: adv_images,mdl.y_: adv_labels})))
     for d,v in sorted(epsilon_tracker.items()):
@@ -316,7 +331,9 @@ def main(_):
     true_pic = mdl.pictrue
     false_pic = mdl.picfalse
     labels = ['ORIGINAL NEURAL NET CORRECT ON THIS %s' %( mdl.pictruelabel[0]), 'ORIGINAL NEURAL NET THOUGHT UNTAMPERED %s WAS %s'% (mdl.picfalselabel[1], mdl.picfalselabel[0]), 'ORIGINAL IMAGE %s' % (adv_real[winners[0]]), 'ORIGINAL NET THOUGHT %s'%(adv_pred[winners[0]]),'ORIGINAL IMAGE %s' % (adv_real[winners[rando]]), 'ORIGINAL NET THOUGHT %s' % (adv_pred[winners[rando]]) ]
-    graphics([true_pic, false_pic, adv_pic0_real, adv_pic0, adv_pic1_real, adv_pic1], labels)
+    logger.info('total program run time: %f' %(time.time()-start_t))
+    if not FLAGS.nograph:
+      graphics([true_pic, false_pic, adv_pic0_real, adv_pic0, adv_pic1_real, adv_pic1], labels)
 
     
 
@@ -330,6 +347,7 @@ if __name__ == '__main__':
   parser.add_argument('--augments', type=int,default=10,help='number of attack augmentations to sample for epsilon on inputs')
   parser.add_argument('--split', type=float,default=200,help='train test set percent split')
   parser.add_argument('--fsplit', type=float,default=None,help='train test set percent split')
+  parser.add_argument('--nograph', action='store_true',help='turn graphics off')
   FLAGS, unparsed = parser.parse_known_args()
   #logger.info('FLAGS set: %g'%(FLAGS))
   tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
